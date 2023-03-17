@@ -160,3 +160,34 @@ extension BoundingFrustum {
         CollisionUtil.frustumContainsSphere(frustum: self, sphere: sphere) != ContainmentType.Disjoint
     }
 }
+
+extension BoundingFrustum: Codable {
+    enum CodingKeys: String, CodingKey {
+        case near
+        case far
+        case left
+        case right
+        case top
+        case bottom
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        _near = try container.decode(Plane.self, forKey: .near)
+        _far = try container.decode(Plane.self, forKey: .far)
+        _left = try container.decode(Plane.self, forKey: .left)
+        _right = try container.decode(Plane.self, forKey: .right)
+        _top = try container.decode(Plane.self, forKey: .top)
+        _bottom = try container.decode(Plane.self, forKey: .bottom)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(_near, forKey: .near)
+        try container.encode(_far, forKey: .far)
+        try container.encode(_left, forKey: .left)
+        try container.encode(_right, forKey: .right)
+        try container.encode(_top, forKey: .top)
+        try container.encode(_bottom, forKey: .bottom)
+    }
+}

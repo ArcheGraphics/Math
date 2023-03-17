@@ -204,4 +204,20 @@ extension BoundingBox {
 public typealias Bounds = BoundingBox
 
 extension BoundingBox: Codable {
+    enum CodingKeys: String, CodingKey {
+        case center
+        case extents
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        m_Center = try container.decode(Vector3.self, forKey: .center)
+        m_Extents = try container.decode(Vector3.self, forKey: .extents)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(m_Center, forKey: .center)
+        try container.encode(m_Extents, forKey: .extents)
+    }
 }

@@ -440,8 +440,24 @@ extension Color {
     }
 }
 
-extension Color: Equatable {
+extension Color: Codable {
+    enum CodingKeys: String, CodingKey {
+        case element
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        elements = try container.decode(SIMD4<Float>.self, forKey: .element)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(elements, forKey: .element)
+    }
 }
 
-extension Color: Codable {
+extension Color: Equatable {
+    public static func == (lhs: Color, rhs: Color) -> Bool {
+        Color.equals(left: lhs, right: rhs)
+    }
 }

@@ -332,4 +332,23 @@ extension Vector2 {
 }
 
 extension Vector2: Codable {
+    enum CodingKeys: String, CodingKey {
+        case element
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        elements = try container.decode(SIMD2<Float>.self, forKey: .element)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(elements, forKey: .element)
+    }
+}
+
+extension Vector2: Equatable {
+    public static func == (lhs: Vector2, rhs: Vector2) -> Bool {
+        Vector2.equals(left: lhs, right: rhs)
+    }
 }

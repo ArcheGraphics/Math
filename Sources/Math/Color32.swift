@@ -86,6 +86,34 @@ public struct Color32 {
 }
 
 extension Color32: Codable {
+    enum CodingKeys: String, CodingKey {
+        case r
+        case g
+        case b
+        case a
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        r = try container.decode(UInt8.self, forKey: .r)
+        g = try container.decode(UInt8.self, forKey: .g)
+        b = try container.decode(UInt8.self, forKey: .b)
+        a = try container.decode(UInt8.self, forKey: .a)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(r, forKey: .r)
+        try container.encode(g, forKey: .g)
+        try container.encode(b, forKey: .b)
+        try container.encode(a, forKey: .a)
+    }
+}
+
+extension Color32: Equatable {
+    public static func == (lhs: Color32, rhs: Color32) -> Bool {
+        lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b && lhs.a == rhs.a
+    }
 }
 
 extension Color {

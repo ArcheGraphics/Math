@@ -288,4 +288,26 @@ public struct Rect {
 }
 
 extension Rect: Codable {
+    enum CodingKeys: String, CodingKey {
+        case xMin
+        case yMin
+        case width
+        case height
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        m_XMin = try container.decode(Float.self, forKey: .xMin)
+        m_YMin = try container.decode(Float.self, forKey: .yMin)
+        m_Width = try container.decode(Float.self, forKey: .width)
+        m_Height = try container.decode(Float.self, forKey: .height)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(m_XMin, forKey: .xMin)
+        try container.encode(m_YMin, forKey: .yMin)
+        try container.encode(m_Width, forKey: .width)
+        try container.encode(m_Height, forKey: .height)
+    }
 }

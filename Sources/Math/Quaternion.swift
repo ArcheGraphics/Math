@@ -9,13 +9,6 @@ import simd
 /// Represents a four dimensional mathematical quaternion.
 public struct Quaternion {
     var elements: simd_quatf
-    
-    enum CodingKeys: String, CodingKey {
-       case x
-       case y
-       case z
-       case w
-    }
 
     public var x: Float {
         get {
@@ -551,7 +544,14 @@ extension Quaternion {
     }
 }
 
-extension Quaternion: Encodable {
+extension Quaternion: Codable {
+    enum CodingKeys: String, CodingKey {
+       case x
+       case y
+       case z
+       case w
+    }
+    
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(x, forKey: .x)
@@ -559,9 +559,7 @@ extension Quaternion: Encodable {
         try container.encode(z, forKey: .z)
         try container.encode(w, forKey: .w)
     }
-}
 
-extension Quaternion: Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let x = try container.decode(Float.self, forKey: .x)
@@ -569,5 +567,11 @@ extension Quaternion: Decodable {
         let z = try container.decode(Float.self, forKey: .z)
         let w = try container.decode(Float.self, forKey: .w)
         elements = simd_quatf(ix: x, iy: y, iz: z, r: w)
+    }
+}
+
+extension Quaternion: Equatable {
+    public static func == (lhs: Quaternion, rhs: Quaternion) -> Bool {
+        Quaternion.equals(left: lhs, right: rhs)
     }
 }

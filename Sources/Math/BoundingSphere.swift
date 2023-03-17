@@ -81,4 +81,20 @@ extension BoundingSphere {
 }
 
 extension BoundingSphere: Codable {
+    enum CodingKeys: String, CodingKey {
+        case center
+        case radius
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        _center = try container.decode(Vector3.self, forKey: .center)
+        _radius = try container.decode(Float.self, forKey: .radius)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(_center, forKey: .center)
+        try container.encode(_radius, forKey: .radius)
+    }
 }
