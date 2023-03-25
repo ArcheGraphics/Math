@@ -271,7 +271,7 @@ public struct Rect {
     ///   - rectangle: Rectangle to get a point inside.
     ///   - normalizedRectCoordinates: Normalized coordinates to get a point for.
     /// - Returns: NormalizedToPoint
-    public static func NormalizedToPoint(rectangle: Rect, normalizedRectCoordinates: Vector2) -> Vector2 {
+    public static func normalizedToPoint(rectangle: Rect, normalizedRectCoordinates: Vector2) -> Vector2 {
         Vector2(MathUtil.lerp(a: rectangle.x, b: rectangle.xMax, t: normalizedRectCoordinates.x),
                 MathUtil.lerp(a: rectangle.y, b: rectangle.yMax, t: normalizedRectCoordinates.y))
     }
@@ -281,7 +281,7 @@ public struct Rect {
     ///   - rectangle: Rectangle to get normalized coordinates inside.
     ///   - point: A point inside the rectangle to get normalized coordinates for.
     /// - Returns: PointToNormalized
-    public static func PointToNormalized(rectangle: Rect, point: Vector2) -> Vector2 {
+    public static func pointToNormalized(rectangle: Rect, point: Vector2) -> Vector2 {
         Vector2(MathUtil.inverseLerp(a: rectangle.x, b: rectangle.xMax, value: point.x),
                 MathUtil.inverseLerp(a: rectangle.y, b: rectangle.yMax, value: point.y))
     }

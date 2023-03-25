@@ -47,7 +47,7 @@ final class CodableTests: XCTestCase {
     }
     
     func testQuaternion() {
-        let quat = Quaternion(1, 2, 3, 4)
+        let quat = Quaternion(x: 1, y: 2, z: 3, w: 4)
         let data = try! jsonEncode.encode(quat)
         let newQuat = try! jsonDecode.decode(Quaternion.self, from: data)
         XCTAssertEqual(quat, newQuat)

@@ -123,7 +123,7 @@ class Vector4Tests: XCTestCase {
 
     func testStaticNormalize() {
         let a = Vector4(3, 4, 0, 0)
-        let out = Vector4.normalize(left: a)
+        let out = a.normalized
         XCTAssertEqual(Vector4.equals(left: out, right: Vector4(0.6, 0.8, 0, 0)), true)
     }
 
@@ -138,12 +138,11 @@ class Vector4Tests: XCTestCase {
 
     func testStaticTransform() {
         let a = Vector4(2, 3, 4, 5)
-        var m4 = Matrix()
-        _ = m4.set(m11: 1, m12: 0, m13: 0, m14: 0,
+        let m4 = Matrix(m11: 1, m12: 0, m13: 0, m14: 0,
                 m21: 0, m22: 1, m23: 0, m24: 0,
                 m31: 0, m32: 0, m33: 1, m34: 0,
                 m41: 0, m42: 0, m43: 1, m44: 0)
-        var out = Vector4.transform(v: a, m: m4)
+        var out = m4 * a
         XCTAssertEqual(out.x, 2)
         XCTAssertEqual(out.y, 3)
         XCTAssertEqual(out.z, 9)
@@ -155,7 +154,7 @@ class Vector4Tests: XCTestCase {
         XCTAssertEqual(out.z, a.z)
         XCTAssertEqual(out.w, a.w)
 
-        out = Vector4.transformByQuat(v: a, q: Quaternion(2, 3, 4, 5))
+        out = Vector4.transformByQuat(v: a, q: Quaternion(x: 2, y: 3, z: 4, w: 5))
         XCTAssertEqual(out.x, 108)
         XCTAssertEqual(out.y, 162)
         XCTAssertEqual(out.z, 216)
@@ -281,13 +280,9 @@ class Vector4Tests: XCTestCase {
     }
 
     func testNormalize() {
-        var a = Vector4(3, 4, 0, 0)
-        let out = a.normalize()
-        XCTAssertEqual(out.x, a.x)
-        XCTAssertEqual(out.y, a.y)
-        XCTAssertEqual(out.z, a.z)
-        XCTAssertEqual(out.w, a.w)
-        XCTAssertEqual(Vector4.equals(left: a, right: Vector4(0.6, 0.8, 0, 0)), true)
+        let a = Vector4(3, 4, 0, 0)
+        let out = a.normalized
+        XCTAssertEqual(Vector4.equals(left: out, right: Vector4(0.6, 0.8, 0, 0)), true)
     }
 
     func testScale() {

@@ -123,27 +123,27 @@ extension BoundingFrustum {
 
         // near
         _near = Plane(Vector3(m14 + m13, m24 + m23, m34 + m33), m44 + m43)
-        _ = _near.normalize()
+        _near = _near.normalized
 
         // far
         _far = Plane(Vector3(m14 - m13, m24 - m23, m34 - m33), m44 - m43)
-        _ = _far.normalize()
+        _far = _far.normalized
 
         // left
         _left = Plane(Vector3(m14 + m11, m24 + m21, m34 + m31), m44 + m41)
-        _ = _left.normalize()
+        _left = _left.normalized
 
         // right
         _right = Plane(Vector3(m14 - m11, m24 - m21, m34 - m31), m44 - m41)
-        _ = _right.normalize()
+        _right = _right.normalized
 
         // bottom
         _bottom = Plane(Vector3(m14 + m12, m24 + m22, m34 + m32), m44 + m42)
-        _ = _bottom.normalize()
+        _bottom = _bottom.normalized
 
         // top
         _top = Plane(Vector3(m14 - m12, m24 - m22, m34 - m32), m44 - m42)
-        _ = _top.normalize()
+        _top = _top.normalized
     }
 
     /// Get whether or not a specified bounding box intersects with this frustum (Contains or Intersects).

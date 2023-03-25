@@ -63,6 +63,23 @@ public struct Quaternion {
             elements
         }
     }
+    
+    public var conjugate: Quaternion {
+        Quaternion(elements.conjugate)
+    }
+    
+    /// Calculate the inverse of the specified quaternion.
+    public var invert: Quaternion {
+        Quaternion(elements.inverse)
+    }
+    
+    /// Converts the vector into a unit vector.
+    /// - Parameters:
+    ///   - left: The vector to normalize
+    /// - Returns: The normalized vector
+    public var normalized: Quaternion {
+        Quaternion(elements.normalized)
+    }
 
     public init() {
         elements = simd_quatf(ix: 0, iy: 0, iz: 0, r: 1)
@@ -74,8 +91,29 @@ public struct Quaternion {
     ///   - y: The y component of the quaternion, default 0
     ///   - z: The z component of the quaternion, default 0
     ///   - w: The w component of the quaternion, default 1
-    public init(_ x: Float = 0, _ y: Float = 0, _ z: Float = 0, _ w: Float = 1) {
+    public init(x: Float = 0, y: Float = 0, z: Float = 0, w: Float = 1) {
         elements = simd_quatf(ix: x, iy: y, iz: z, r: w)
+    }
+    
+    public init(_ m: Matrix3x3) {
+        elements = simd_quatf(m.elements)
+    }
+    
+    public init(_ m: Matrix) {
+        elements = simd_quatf(m.elements)
+    }
+    
+    /// Calculate a quaternion rotates around an arbitrary axis.
+    /// - Parameters:
+    ///   - axis: The axis
+    ///   - rad: The rotation angle in radians
+    /// - Returns: The quaternion after rotate
+    public init(axis: Vector3, rad: Float) {
+        elements = simd_quatf(angle: rad, axis: axis.normalized.elements)
+    }
+    
+    public init(from: Vector3, to: Vector3) {
+        elements = simd_quatf(from: from.elements, to: to.elements)
     }
 
     /// Constructor of Quaternion.
@@ -101,6 +139,18 @@ extension Quaternion {
     public static func +=(left: inout Quaternion, right: Quaternion) {
         left.elements += right.elements
     }
+    
+    public static func -(left: Quaternion, right: Quaternion) -> Quaternion {
+        Quaternion(left.elements - right.elements)
+    }
+
+    public static func -=(left: inout Quaternion, right: Quaternion) {
+        left.elements -= right.elements
+    }
+
+    prefix public static func -(rhs: Quaternion) -> Quaternion {
+        Quaternion(-rhs.elements)
+    }
 
     /// Determines the product of two vectors.
     /// - Parameters:
@@ -124,20 +174,24 @@ extension Quaternion {
         Quaternion(left.elements * s)
     }
 
+    public static func *(left: Float, s: Quaternion) -> Quaternion {
+        Quaternion(left * s.elements)
+    }
+    
     public static func *=(left: inout Quaternion, right: Float) {
         left.elements *= right
+    }
+    
+    public static func /(left: Quaternion, s: Float) -> Quaternion {
+        Quaternion(left.elements / s)
+    }
+    
+    public static func /=(left: inout Quaternion, right: Float) {
+        left.elements /= right
     }
 }
 
 extension Quaternion {
-    /// Calculate quaternion that contains conjugated version of the specified quaternion.
-    /// - Parameters:
-    ///   - a: The specified quaternion
-    /// - Returns: The conjugate version of the specified quaternion
-    public static func conjugate(a: Quaternion) -> Quaternion {
-        Quaternion(a.elements.conjugate)
-    }
-
     /// Determines the dot product of two vectors.
     /// - Parameters:
     ///   - left: The first vector to dot
@@ -157,16 +211,6 @@ extension Quaternion {
                 MathUtil.equals(left.y, right.y) &&
                 MathUtil.equals(left.z, right.z) &&
                 MathUtil.equals(left.w, right.w)
-    }
-
-    /// Calculate a quaternion rotates around an arbitrary axis.
-    /// - Parameters:
-    ///   - axis: The axis
-    ///   - rad: The rotation angle in radians
-    /// - Returns: The quaternion after rotate
-    public static func rotationAxisAngle(axis: Vector3, rad: Float) -> Quaternion {
-        var axis = axis
-        return Quaternion(simd_quatf(angle: rad, axis: axis.normalize().elements))
     }
 
     /// Calculate a quaternion from the specified yaw, pitch and roll angles.
@@ -190,10 +234,10 @@ extension Quaternion {
         let cosYawPitch = cosYaw * cosPitch
         let sinYawPitch = sinYaw * sinPitch
 
-        return Quaternion(cosYaw * sinPitch * cosRoll + sinYaw * cosPitch * sinRoll,
-                sinYaw * cosPitch * cosRoll - cosYaw * sinPitch * sinRoll,
-                cosYawPitch * sinRoll - sinYawPitch * cosRoll,
-                cosYawPitch * cosRoll + sinYawPitch * sinRoll)
+        return Quaternion(x: cosYaw * sinPitch * cosRoll + sinYaw * cosPitch * sinRoll,
+                          y: sinYaw * cosPitch * cosRoll - cosYaw * sinPitch * sinRoll,
+                          z: cosYawPitch * sinRoll - sinYawPitch * cosRoll,
+                          w: cosYawPitch * cosRoll + sinYawPitch * sinRoll)
     }
 
     /// Calculate a quaternion rotates around x, y, z axis (pitch/yaw/roll).
@@ -210,22 +254,6 @@ extension Quaternion {
         Quaternion.rotationYawPitchRoll(yaw: e.y, pitch: e.x, roll: e.z)
     }
 
-    /// Calculate a quaternion from the specified 3x3 matrix.
-    /// - Parameters:
-    ///   - m: The specified 3x3 matrix
-    /// - Returns: The calculated quaternion
-    public static func rotationMatrix3x3(m: Matrix3x3) -> Quaternion {
-        Quaternion(simd_quatf(m.elements))
-    }
-
-    /// Calculate the inverse of the specified quaternion.
-    /// - Parameters:
-    ///   - a: The quaternion whose inverse is to be calculated
-    /// - Returns: The inverse of the specified quaternion
-    public static func invert(a: Quaternion) -> Quaternion {
-        Quaternion(a.elements.inverse)
-    }
-
     /// Performs a spherical linear blend between two quaternions.
     /// - Parameters:
     ///   - start: The first quaternion
@@ -234,14 +262,6 @@ extension Quaternion {
     /// - Returns: The result of spherical linear blending between two quaternions
     public static func slerp(start: Quaternion, end: Quaternion, t: Float) -> Quaternion {
         Quaternion(simd_slerp(start.elements, end.elements, t))
-    }
-
-    /// Converts the vector into a unit vector.
-    /// - Parameters:
-    ///   - left: The vector to normalize
-    /// - Returns: The normalized vector
-    public static func normalize(left: Quaternion) -> Quaternion {
-        Quaternion(simd_normalize(left.elements))
     }
 
     /// Calculate a quaternion rotate around X axis.
@@ -253,7 +273,7 @@ extension Quaternion {
         let s = sin(rad)
         let c = cos(rad)
 
-        return Quaternion(s, 0, 0, c)
+        return Quaternion(x: s, y: 0, z: 0, w: c)
     }
 
     /// Calculate a quaternion rotate around Y axis.
@@ -265,7 +285,7 @@ extension Quaternion {
         let s = sin(rad)
         let c = cos(rad)
 
-        return Quaternion(0, s, 0, c)
+        return Quaternion(x: 0, y: s, z: 0, w: c)
     }
 
     /// Calculate a quaternion rotate around Z axis.
@@ -277,7 +297,7 @@ extension Quaternion {
         let s = sin(rad)
         let c = cos(rad)
 
-        return Quaternion(0, 0, s, c)
+        return Quaternion(x: 0, y: 0, z: s, w: c)
     }
 
     /// Calculate a quaternion that the specified quaternion rotate around X axis.
@@ -294,10 +314,10 @@ extension Quaternion {
         let bx = sin(rad)
         let bw = cos(rad)
 
-        return Quaternion(x * bw + w * bx,
-                y * bw + z * bx,
-                z * bw - y * bx,
-                w * bw - x * bx)
+        return Quaternion(x: x * bw + w * bx,
+                          y: y * bw + z * bx,
+                          z: z * bw - y * bx,
+                          w: w * bw - x * bx)
     }
 
     /// Calculate a quaternion that the specified quaternion rotate around Y axis.
@@ -314,10 +334,10 @@ extension Quaternion {
         let by = sin(rad)
         let bw = cos(rad)
 
-        return Quaternion(x * bw - z * by,
-                y * bw + w * by,
-                z * bw + x * by,
-                w * bw - y * by)
+        return Quaternion(x: x * bw - z * by,
+                          y: y * bw + w * by,
+                          z: z * bw + x * by,
+                          w: w * bw - y * by)
     }
 
     /// Calculate a quaternion that the specified quaternion rotate around Z axis.
@@ -334,10 +354,10 @@ extension Quaternion {
         let bz = sin(rad)
         let bw = cos(rad)
 
-        return Quaternion(x * bw + y * bz,
-                y * bw - x * bz,
-                z * bw + w * bz,
-                w * bw - z * bz)
+        return Quaternion(x: x * bw + y * bz,
+                          y: y * bw - x * bz,
+                          z: z * bw + w * bz,
+                          w: w * bw - z * bz)
     }
 
     /// Returns the angle in degrees between two rotations a and b.
@@ -348,22 +368,6 @@ extension Quaternion {
 
     private static func isEqualUsingDot(_ dot: Float) -> Bool {
         dot > 0.9999989867210388
-    }
-
-
-    /// Creates a rotation which rotates from fromDirection to toDirection.
-    /// - Parameters:
-    ///   - from: the vector to start from
-    ///   - to: the vector to rotate to
-    /// - Returns: a rotation about an axis normal to the two vectors which takes one to the other via the shortest path
-    public static func shortestRotation(from: Vector3, target: Vector3) -> Quaternion {
-        let d = Vector3.dot(left: from, right: target)
-        let cross = Vector3.cross(left: from, right: target)
-
-        var q = d > -1 ? Quaternion(cross.x, cross.y, cross.z, 1 + d) : abs(from.x) < 0.1 ? Quaternion(0.0, from.z, -from.y, 0.0)
-                : Quaternion(from.y, -from.x, 0.0, 0.0)
-
-        return q.normalize()
     }
 }
 
@@ -393,31 +397,6 @@ extension Quaternion {
         return self
     }
 
-    /// Transforms this quaternion into its conjugated version.
-    /// - Returns: This quaternion
-    public mutating func conjugate() -> Quaternion {
-        elements = elements.conjugate
-        return self
-    }
-
-    /// Identity this quaternion.
-    /// - Returns: This quaternion after identity
-    public mutating func identity() -> Quaternion {
-        elements = simd_quatf(ix: 0, iy: 0, iz: 0, r: 1)
-
-        return self
-    }
-
-
-    /// Converts this quaternion into a unit quaternion.
-    /// - Returns: This quaternion
-    public mutating func normalize() -> Quaternion {
-        if simd_length(elements) > Float.leastNonzeroMagnitude {
-            self = Quaternion.normalize(left: self)
-        }
-        return self
-    }
-
     /// Calculate this quaternion rotate around X axis.
     /// - Parameter rad: The rotation angle in radians
     /// - Returns: This quaternion
@@ -439,31 +418,6 @@ extension Quaternion {
     /// - Returns: This quaternion
     public mutating func rotateZ(rad: Float) -> Quaternion {
         self = Quaternion.rotateZ(quaternion: self, rad: rad)
-        return self
-    }
-
-    /// Calculate this quaternion rotates around an arbitrary axis.
-    /// - Parameters:
-    ///   - axis: The axis
-    ///   - rad: The rotation angle in radians
-    /// - Returns: This quaternion
-    public mutating func rotationAxisAngle(axis: Vector3, rad: Float) -> Quaternion {
-        self = Quaternion.rotationAxisAngle(axis: axis, rad: rad)
-        return self
-    }
-
-    /// Determines the product of this quaternion and the specified quaternion.
-    /// - Parameter quat: The specified quaternion
-    /// - Returns: The product of the two quaternions
-    public mutating func multiply(quat: Quaternion) -> Quaternion {
-        self = self * quat
-        return self
-    }
-
-    /// Invert this quaternion.
-    /// - Returns: This quaternion after invert
-    public mutating func invert() -> Quaternion {
-        self = Quaternion.invert(a: self)
         return self
     }
 

@@ -55,6 +55,17 @@ public struct Vector4 {
             elements
         }
     }
+    
+    /// Converts the vector into a unit vector.
+    /// - Parameters:
+    ///   - left: The vector to normalize
+    /// - Returns: The normalized vector
+    public var normalized: Vector4 {
+        if simd_length_squared(elements) > Float.leastNonzeroMagnitude {
+            return Vector4(simd_normalize(elements))
+        }
+        return self
+    }
 
     public init() {
         elements = SIMD4<Float>(0, 0, 0, 0)
@@ -239,28 +250,11 @@ extension Vector4 {
     public static func min(left: Vector4, right: Vector4) -> Vector4 {
         Vector4(simd_min(left.elements, right.elements))
     }
-
-    /// Converts the vector into a unit vector.
-    /// - Parameters:
-    ///   - left: The vector to normalize
-    /// - Returns: The normalized vector
-    public static func normalize(left: Vector4) -> Vector4 {
-        Vector4(simd_normalize(left.elements))
-    }
 }
 
 //MARK: - Static Method: Transformation
 
 extension Vector4 {
-    /// Performs a transformation using the given 4x4 matrix.
-    /// - Parameters:
-    ///   - v: The vector to transform
-    ///   - m: The transform matrix
-    /// - Returns: The transformed vector4
-    public static func transform(v: Vector4, m: Matrix) -> Vector4 {
-        Vector4(simd_mul(m.elements, v.elements))
-    }
-
     /// Performs a transformation using the given quaternion.
     /// - Parameters:
     ///   - v: The vector to transform
@@ -354,15 +348,6 @@ extension Vector4 {
     /// - Returns: This vector
     public mutating func negate() -> Vector4 {
         elements = -elements
-        return self
-    }
-
-    /// Converts this vector into a unit vector.
-    /// - Returns: This vector
-    public mutating func normalize() -> Vector4 {
-        if simd_length(elements) > Float.leastNonzeroMagnitude {
-            elements = simd_normalize(elements)
-        }
         return self
     }
 

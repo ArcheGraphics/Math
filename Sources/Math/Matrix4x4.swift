@@ -64,6 +64,43 @@ extension Matrix {
         left.elements *= right.elements
     }
 
+    public static func *(left: Matrix, right: Vector4) -> Vector4 {
+        Vector4(left.elements * right.elements)
+    }
+    
+    public static func *(left: Matrix, right: Float) -> Matrix {
+        Matrix(left.elements * right)
+    }
+    
+    public static func *(left: Float, right: Matrix) -> Matrix {
+        Matrix(left * right.elements)
+    }
+
+    public static func *=(left: inout Matrix, right: Float) {
+        left.elements *= right
+    }
+    
+    public static func +(left: Matrix, right: Matrix) -> Matrix {
+        Matrix(left.elements + right.elements)
+    }
+
+    public static func +=(left: inout Matrix, right: Matrix) {
+        left.elements += right.elements
+    }
+
+    public static func -(left: Matrix, right: Matrix) -> Matrix {
+        Matrix(left.elements - right.elements)
+    }
+
+    public static func -=(left: inout Matrix, right: Matrix) {
+        left.elements -= right.elements
+    }
+    
+    prefix public static func - (rhs: Matrix) -> Matrix {
+        Matrix(-rhs.elements)
+    }
+
+    
     /// Determines whether the specified matrices are equals.
     /// - Parameters:
     ///   - left: The first matrix to compare
@@ -246,9 +283,9 @@ extension Matrix {
     /// - Returns: The calculated look-at matrix
     public static func lookAt(eye: Vector3, target: Vector3, up: Vector3) -> Matrix {
         var zAxis = eye - target
-        _ = zAxis.normalize()
+        zAxis = zAxis.normalized
         var xAxis = Vector3.cross(left: up, right: zAxis)
-        _ = xAxis.normalize()
+        xAxis = xAxis.normalized
         let yAxis = Vector3.cross(left: zAxis, right: xAxis)
 
         return Matrix(m11: xAxis.x,
@@ -571,14 +608,14 @@ extension Matrix {
         if (abs(sx) < Float.leastNonzeroMagnitude ||
                 abs(sy) < Float.leastNonzeroMagnitude ||
                 abs(sz) < Float.leastNonzeroMagnitude) {
-            _ = rotation.identity()
+            rotation = Quaternion()
             return false
         } else {
             let invSX = 1 / sx
             let invSY = 1 / sy
             let invSZ = 1 / sz
 
-            rotation = Quaternion.rotationMatrix3x3(m: Matrix3x3(m11: m11 * invSX,
+            rotation = Quaternion(Matrix3x3(m11: m11 * invSX,
                     m12: m12 * invSX,
                     m13: m13 * invSX,
                     m21: m21 * invSY,

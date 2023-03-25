@@ -69,7 +69,7 @@ class MatrixTests: XCTestCase {
     }
 
     func testStaticRotationQuaternion() {
-        let q = Quaternion(1, 2, 3, 4)
+        let q = Quaternion(x: 1, y: 2, z: 3, w: 4)
         let out = Matrix.rotationQuaternion(quaternion: q)
         XCTAssertEqual(Matrix.equals(left: out,
                 right: Matrix(m11: -25, m12: 28, m13: -10, m14: 0,
@@ -92,7 +92,7 @@ class MatrixTests: XCTestCase {
     }
 
     func testStaticRotationTranslation() {
-        let q = Quaternion(1, 0.5, 2, 1)
+        let q = Quaternion(x: 1, y: 0.5, z: 2, w: 1)
         let v = Vector3(1, 1, 1)
         let out = Matrix.rotationTranslation(quaternion: q, translation: v)
         XCTAssertEqual(Matrix.equals(left: out,
@@ -103,7 +103,7 @@ class MatrixTests: XCTestCase {
     }
 
     func testStaticAffineTransformation() {
-        let q = Quaternion(1, 0.5, 2, 1)
+        let q = Quaternion(x: 1, y: 0.5, z: 2, w: 1)
         let v = Vector3(1, 1, 1)
         let s = Vector3(1, 0.5, 2)
         let out = Matrix.affineTransformation(scale: s, rotation: q, translation: v)
@@ -339,7 +339,7 @@ class MatrixTests: XCTestCase {
         XCTAssertEqual(
                 Quaternion.equals(
                         left: quat,
-                        right: Quaternion(1.879038e-02, -9.554128e-02, 1.844761e-02, 7.831795e-01)
+                        right: Quaternion(x: 1.879038e-02, y: -9.554128e-02, z: 1.844761e-02, w: 7.831795e-01)
                 ), true)
         XCTAssertEqual(Vector3.equals(left: scale, right: Vector3(3.7416573867739413, 10.488088481701515, 17.91116946723357)), true)
     }
@@ -355,7 +355,7 @@ class MatrixTests: XCTestCase {
         XCTAssertEqual(
                 Quaternion.equals(
                         left: quat,
-                        right: Quaternion(-0.44736068104759547, 0.6882472016116852, -0.3441236008058426, 2.179449471770337)
+                        right: Quaternion(x: -0.44736068104759547, y: 0.6882472016116852, z: -0.3441236008058426, w: 2.179449471770337)
                 ), true)
 
         // getScaling

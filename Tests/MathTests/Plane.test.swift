@@ -24,8 +24,8 @@ class PlaneTests: XCTestCase {
         var plane2 = Plane(Vector3(0, 1, 0), -1)
 
         XCTAssertEqual(plane1.distance - plane2.distance, 0)
-        _ = plane1.normalize()
-        _ = plane2.normalize()
+        plane1 = plane1.normalized
+        plane2 = plane2.normalized
         XCTAssertEqual(Vector3.equals(left: plane1.normal, right: plane2.normal), true)
     }
 

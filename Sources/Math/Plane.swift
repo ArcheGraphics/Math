@@ -25,9 +25,18 @@ public struct Plane {
         }
     }
     
+    /// Normalize the normal vector of the specified plane.
+    /// - Parameters:
+    ///   - p: The specified plane
+    /// - Returns: A normalized version of the specified plane
+    public var normalized: Plane {
+        let factor = 1.0 / _normal.length()
+        return Plane(_normal * factor, _distance * factor)
+    }
+    
     /// Creates a plane.
     public init(_ inNormal: Vector3, _ inPoint: Vector3) {
-        _normal = inNormal.normalized()
+        _normal = inNormal.normalized
         _distance = -Vector3.dot(left: _normal, right: inPoint);
     }
 
@@ -47,20 +56,13 @@ public struct Plane {
     ///   - inNormal: The plane's normal vector.
     ///   - inPoint: A point that lies on the plane.
     public mutating func setNormalAndPosition(_ inNormal: Vector3, _ inPoint: Vector3) {
-        _normal = Vector3.normalize(left: inNormal)
+        _normal = inNormal.normalized
         _distance = -Vector3.dot(left: inNormal, right: inPoint)
     }
 }
 
 extension Plane {
-    /// Normalize the normal vector of the specified plane.
-    /// - Parameters:
-    ///   - p: The specified plane
-    /// - Returns: A normalized version of the specified plane
-    public static func normalize(p: Plane) -> Plane {
-        let factor = 1.0 / p.normal.length()
-        return Plane(p.normal * factor, p.distance * factor)
-    }
+
 
     /// Calculate the plane that contains the three specified points.
     /// - Parameters:
@@ -88,15 +90,6 @@ extension Plane {
         let z = xy * invPyth
 
         return Plane(Vector3(x, y, z), -(x * x0 + y * y0 + z * z0))
-    }
-}
-
-extension Plane {
-    /// Normalize the normal vector of this plane.
-    /// - Returns: The plane after normalize
-    public mutating func normalize() -> Plane {
-        self = Plane.normalize(p: self)
-        return self
     }
 }
 

@@ -28,6 +28,11 @@ public struct Matrix3x3 {
                                   SIMD3<Float>(m21, m22, m23),
                                   SIMD3<Float>(m31, m32, m33)])
     }
+    
+    /// Construct a 3x3 matrix from `quaternion`.
+    public init(_ quaternion: Quaternion) {
+        elements = simd_float3x3(quaternion.elements)
+    }
 
     /// Constructor of Vector3.
     /// - Parameters:
@@ -83,6 +88,26 @@ extension Matrix3x3 {
 
     public static func *=(left: inout Matrix3x3, right: Matrix3x3) {
         left.elements *= right.elements
+    }
+    
+    public static func *(left: Matrix3x3, right: Vector3) -> Vector3 {
+        Vector3(left.elements * right.elements)
+    }
+    
+    public static func *(left: Vector3, right: Matrix3x3) -> Vector3 {
+        Vector3(left.elements * right.elements)
+    }
+    
+    public static func *(left: Matrix3x3, right: Float) -> Matrix3x3 {
+        Matrix3x3(left.elements * right)
+    }
+    
+    public static func *(left: Float, right: Matrix3x3) -> Matrix3x3 {
+        Matrix3x3(left * right.elements)
+    }
+    
+    public static func *=(left: inout Matrix3x3, right: Float) {
+        left.elements *= right
     }
 }
 

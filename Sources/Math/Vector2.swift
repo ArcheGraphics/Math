@@ -43,6 +43,17 @@ public struct Vector2 {
             elements
         }
     }
+    
+    /// Converts the vector into a unit vector.
+    /// - Parameters:
+    ///   - left: The vector to normalize
+    /// - Returns: The normalized vector
+    public var normalized: Vector2 {
+        if simd_length_squared(elements) > Float.leastNonzeroMagnitude {
+            return Vector2(simd_normalize(elements))
+        }
+        return self
+    }
 
     public init() {
         elements = SIMD2<Float>(0, 0)
@@ -218,14 +229,6 @@ extension Vector2 {
     public static func min(left: Vector2, right: Vector2) -> Vector2 {
         Vector2(simd_min(left.elements, right.elements))
     }
-
-    /// Converts the vector into a unit vector.
-    /// - Parameters:
-    ///   - left: The vector to normalize
-    /// - Returns: The normalized vector
-    public static func normalize(left: Vector2) -> Vector2 {
-        Vector2(simd_normalize(left.elements))
-    }
 }
 
 //MARK: - Class Method
@@ -287,15 +290,6 @@ extension Vector2 {
     /// - Returns: This vector
     public mutating func negate() -> Vector2 {
         elements = -elements
-        return self
-    }
-
-    /// Converts this vector into a unit vector.
-    /// - Returns: This vector
-    public mutating func normalize() -> Vector2 {
-        if simd_length(elements) > Float.leastNonzeroMagnitude {
-            elements = simd_normalize(elements)
-        }
         return self
     }
 

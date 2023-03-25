@@ -113,7 +113,7 @@ class Vector2Tests: XCTestCase {
 
     func testStaticNormalize() {
         let a = Vector2(3, 4)
-        let out = Vector2.normalize(left: a)
+        let out = a.normalized
         XCTAssertEqual(Vector2.equals(left: out, right: Vector2(0.6, 0.8)), true)
     }
 
@@ -217,11 +217,9 @@ class Vector2Tests: XCTestCase {
     }
 
     func testNormalize() {
-        var a = Vector2(3, 4)
-        let result = a.normalize()
-        XCTAssertEqual(result.x, a.x)
-        XCTAssertEqual(result.y, a.y)
-        XCTAssertEqual(Vector2.equals(left: a, right: Vector2(0.6, 0.8)), true)
+        let a = Vector2(3, 4)
+        let result = a.normalized
+        XCTAssertEqual(Vector2.equals(left: result, right: Vector2(0.6, 0.8)), true)
     }
 
     func testScale() {

@@ -94,7 +94,7 @@ class Matrix3x3Tests: XCTestCase {
                 m31: 9, m32: 10, m33: 11)), true)
 
         // quat
-        let q = Quaternion(1, 2, 3, 4)
+        let q = Quaternion(x: 1, y: 2, z: 3, w: 4)
         out = Matrix3x3.rotationQuaternion(quaternion: q)
         XCTAssertEqual(Matrix3x3.equals(left: out, right: Matrix3x3(m11: -25, m12: 28, m13: -10,
                 m21: -20, m22: -19, m23: 20,

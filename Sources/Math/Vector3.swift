@@ -52,6 +52,17 @@ public struct Vector3 {
             elements
         }
     }
+    
+    /// Converts the vector into a unit vector.
+    /// - Parameters:
+    ///   - left: The vector to normalize
+    /// - Returns: The normalized vector
+    public var normalized: Vector3 {
+        if simd_length_squared(elements) > Float.leastNonzeroMagnitude {
+            return Vector3(simd_normalize(elements))
+        }
+        return self
+    }
 
     public init() {
         elements = SIMD3<Float>(0, 0, 0)
@@ -255,14 +266,6 @@ extension Vector3 {
     public static func min(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(simd_min(left.elements, right.elements))
     }
-
-    /// Converts the vector into a unit vector.
-    /// - Parameters:
-    ///   - left: The vector to normalize
-    /// - Returns: The normalized vector
-    public static func normalize(left: Vector3) -> Vector3 {
-        Vector3(simd_normalize(left.elements))
-    }
 }
 
 //MARK: - Static Method: Transformation
@@ -376,7 +379,7 @@ extension Vector3 {
                 iz * qw - iw * qz - ix * qy + iy * qx)
     }
 
-    public static func SmoothDamp(current: Vector3, target: Vector3, currentVelocity: inout Vector3,
+    public static func smoothDamp(current: Vector3, target: Vector3, currentVelocity: inout Vector3,
                                   smoothTime: Float, deltaTime: Float,
                                   maxSpeed: Float = Float.greatestFiniteMagnitude) -> Vector3 {
         var target = target
@@ -558,22 +561,6 @@ extension Vector3 {
     public mutating func negate() -> Vector3 {
         elements = -elements
         return self
-    }
-
-    /// Converts this vector into a unit vector.
-    /// - Returns: This vector
-    public mutating func normalize() -> Vector3 {
-        if simd_length_squared(elements) > Float.leastNonzeroMagnitude {
-            elements = simd_normalize(elements)
-        }
-        return self
-    }
-
-    public func normalized() -> Vector3 {
-        if simd_length_squared(elements) > Float.leastNonzeroMagnitude {
-            return Vector3(simd_normalize(elements))
-        }
-        return Vector3(1, 0, 0)
     }
 
     /// Scale this vector by the given value.

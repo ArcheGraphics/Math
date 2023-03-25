@@ -124,7 +124,7 @@ class Vector3Tests: XCTestCase {
 
     func testStaticNormalize() {
         let a = Vector3(3, 4, 0)
-        let out = Vector3.normalize(left: a)
+        let out = a.normalized
         XCTAssertEqual(Vector3.equals(left: out, right: Vector3(0.6, 0.8, 0)), true)
     }
 
@@ -148,13 +148,12 @@ class Vector3Tests: XCTestCase {
         XCTAssertEqual(out.z, 183)
 
         let b = Vector4(2, 3, 4, 1)
-        var m4 = Matrix()
-        _ = m4.set(m11: 1, m12: 0, m13: 0, m14: 0,
+        let m4 = Matrix(m11: 1, m12: 0, m13: 0, m14: 0,
                 m21: 0, m22: 1, m23: 0, m24: 0,
                 m31: 0, m32: 0, m33: 1, m34: 0,
                 m41: 0, m42: 0, m43: 1, m44: 1)
         out = Vector3.transformCoordinate(v: a, m: m4)
-        let out4 = Vector4.transform(v: b, m: m4)
+        let out4 = m4 * b
         XCTAssertEqual(out.x, out4.x / out4.w)
         XCTAssertEqual(out.y, out4.y / out4.w)
         XCTAssertEqual(out.z, out4.z / out4.w)
@@ -164,7 +163,7 @@ class Vector3Tests: XCTestCase {
         XCTAssertEqual(out.y, a.y)
         XCTAssertEqual(out.z, a.z)
 
-        out = Vector3.transformByQuat(v: a, quaternion: Quaternion(2, 3, 4, 5))
+        out = Vector3.transformByQuat(v: a, quaternion: Quaternion(x: 2, y: 3, z: 4, w: 5))
         XCTAssertEqual(out.x, 108)
         XCTAssertEqual(out.y, 162)
         XCTAssertEqual(out.z, 216)
@@ -274,12 +273,9 @@ class Vector3Tests: XCTestCase {
     }
 
     func testNormalize() {
-        var a = Vector3(3, 4, 0)
-        let out = a.normalize()
-        XCTAssertEqual(out.x, a.x)
-        XCTAssertEqual(out.y, a.y)
-        XCTAssertEqual(out.z, a.z)
-        XCTAssertEqual(Vector3.equals(left: a, right: Vector3(0.6, 0.8, 0)), true)
+        let a = Vector3(3, 4, 0)
+        let out = a.normalized
+        XCTAssertEqual(Vector3.equals(left: out, right: Vector3(0.6, 0.8, 0)), true)
     }
 
     func testScale() {
@@ -309,13 +305,12 @@ class Vector3Tests: XCTestCase {
     func testTransformCoordinate() {
         let a = Vector3(2, 3, 4)
         let b = Vector4(2, 3, 4, 1)
-        var m4 = Matrix()
-        _ = m4.set(m11: 1, m12: 0, m13: 0, m14: 0,
+        let m4 = Matrix(m11: 1, m12: 0, m13: 0, m14: 0,
                 m21: 0, m22: 1, m23: 0, m24: 0,
                 m31: 0, m32: 0, m33: 1, m34: 0,
                 m41: 0, m42: 0, m43: 1, m44: 1)
         let out = Vector3.transformCoordinate(v: a, m: m4)
-        let out4 = Vector4.transform(v: b, m: m4)
+        let out4 = m4 * b
         XCTAssertEqual(out.x, out4.x / out4.w)
         XCTAssertEqual(out.y, out4.y / out4.w)
         XCTAssertEqual(out.z, out4.z / out4.w)
@@ -323,7 +318,7 @@ class Vector3Tests: XCTestCase {
 
     func testTransformByQuat() {
         var a = Vector3(2, 3, 4)
-        _ = a.transformByQuat(quaternion: Quaternion(2, 3, 4, 5))
+        _ = a.transformByQuat(quaternion: Quaternion(x: 2, y: 3, z: 4, w: 5))
         XCTAssertEqual(a.x, 108)
         XCTAssertEqual(a.y, 162)
         XCTAssertEqual(a.z, 216)
