@@ -387,7 +387,14 @@ extension Vector4 {
 
 extension SIMD4<Float> {
     public var xyz: SIMD3<Float> {
-        SIMD3<Float>(x, y, z)
+        get {
+            SIMD3<Float>(x, y, z)
+        }
+        set {
+            x = newValue.x
+            y = newValue.y
+            z = newValue.z
+        }
     }
 }
 
