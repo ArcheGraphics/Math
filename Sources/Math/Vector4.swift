@@ -45,17 +45,15 @@ public struct Vector4 {
             elements.w = newValue
         }
     }
-    
+
     public var xyz: Vector3 {
         Vector3(elements.xyz)
     }
 
     public var internalValue: SIMD4<Float> {
-        get {
-            elements
-        }
+        elements
     }
-    
+
     /// Converts the vector into a unit vector.
     /// - Parameters:
     ///   - left: The vector to normalize
@@ -93,19 +91,19 @@ public struct Vector4 {
     }
 }
 
-//MARK: - Static Methods
+// MARK: - Static Methods
 
-extension Vector4 {
+public extension Vector4 {
     /// Determines the sum of two vectors.
     /// - Parameters:
     ///   - left: The first vector to add
     ///   - right: The second vector to add
     /// - Returns: The sum of two vectors
-    public static func +(left: Vector4, right: Vector4) -> Vector4 {
+    static func + (left: Vector4, right: Vector4) -> Vector4 {
         Vector4(left.elements + right.elements)
     }
 
-    public static func +=(left: inout Vector4, right: Vector4) {
+    static func += (left: inout Vector4, right: Vector4) {
         left.elements += right.elements
     }
 
@@ -114,11 +112,11 @@ extension Vector4 {
     ///   - left: The first vector to subtract
     ///   - right: The second vector to subtract
     /// - Returns: The difference between two vectors
-    public static func -(left: Vector4, right: Vector4) -> Vector4 {
+    static func - (left: Vector4, right: Vector4) -> Vector4 {
         Vector4(left.elements - right.elements)
     }
 
-    public static func -=(left: inout Vector4, right: Vector4) {
+    static func -= (left: inout Vector4, right: Vector4) {
         left.elements -= right.elements
     }
 
@@ -127,11 +125,11 @@ extension Vector4 {
     ///   - left: The first vector to multiply
     ///   - right: The second vector to multiply
     /// - Returns: The product of two vectors
-    public static func *(left: Vector4, right: Vector4) -> Vector4 {
+    static func * (left: Vector4, right: Vector4) -> Vector4 {
         Vector4(left.elements * right.elements)
     }
 
-    public static func *=(left: inout Vector4, right: Vector4) {
+    static func *= (left: inout Vector4, right: Vector4) {
         left.elements += right.elements
     }
 
@@ -140,11 +138,11 @@ extension Vector4 {
     ///   - left: The vector to scale
     ///   - s: The amount by which to scale the vector
     /// - Returns: The scaled vector
-    public static func *(left: Vector4, s: Float) -> Vector4 {
+    static func * (left: Vector4, s: Float) -> Vector4 {
         Vector4(left.elements * s)
     }
 
-    public static func *=(left: inout Vector4, right: Float) {
+    static func *= (left: inout Vector4, right: Float) {
         left.elements += right
     }
 
@@ -153,11 +151,11 @@ extension Vector4 {
     ///   - left: The first vector to divide
     ///   - right: The second vector to divide
     /// - Returns: The divisor of two vectors
-    public static func /(left: Vector4, right: Vector4) -> Vector4 {
+    static func / (left: Vector4, right: Vector4) -> Vector4 {
         Vector4(left.elements / right.elements)
     }
 
-    public static func /=(left: inout Vector4, right: Vector4) {
+    static func /= (left: inout Vector4, right: Vector4) {
         left.elements /= right.elements
     }
 
@@ -166,11 +164,11 @@ extension Vector4 {
     ///   - left: The vector to scale
     ///   - s: The amount by which to scale the vector
     /// - Returns: The scaled vector
-    public static func /(left: Vector4, s: Float) -> Vector4 {
+    static func / (left: Vector4, s: Float) -> Vector4 {
         Vector4(left.elements / s)
     }
 
-    public static func /=(left: inout Vector4, right: Float) {
+    static func /= (left: inout Vector4, right: Float) {
         left.elements /= right
     }
 
@@ -178,18 +176,18 @@ extension Vector4 {
     /// - Parameters:
     ///   - left: The vector to negate
     /// - Returns: The vector facing in the opposite direction
-    public static prefix func -(left: Vector4) -> Vector4 {
+    static prefix func - (left: Vector4) -> Vector4 {
         Vector4(-left.elements)
     }
 }
 
-extension Vector4 {
+public extension Vector4 {
     /// Determines the dot product of two vectors.
     /// - Parameters:
     ///   - left: The first vector to dot
     ///   - right: The second vector to dot
     /// - Returns: The dot product of two vectors
-    public static func dot(left: Vector4, right: Vector4) -> Float {
+    static func dot(left: Vector4, right: Vector4) -> Float {
         simd_dot(left.elements, right.elements)
     }
 
@@ -198,7 +196,7 @@ extension Vector4 {
     ///   - left: The first vector
     ///   - right: The second vector
     /// - Returns: The distance of two vectors
-    public static func distance(left: Vector4, right: Vector4) -> Float {
+    static func distance(left: Vector4, right: Vector4) -> Float {
         simd_distance(left.elements, right.elements)
     }
 
@@ -207,7 +205,7 @@ extension Vector4 {
     ///   - left: The first vector
     ///   - right: The second vector
     /// - Returns: The squared distance of two vectors
-    public static func distanceSquared(left: Vector4, right: Vector4) -> Float {
+    static func distanceSquared(left: Vector4, right: Vector4) -> Float {
         simd_distance_squared(left.elements, right.elements)
     }
 
@@ -216,11 +214,11 @@ extension Vector4 {
     ///   - left: The first vector to compare
     ///   - right: The second vector to compare
     /// - Returns: True if the specified vectors are equals, false otherwise
-    public static func equals(left: Vector4, right: Vector4) -> Bool {
+    static func equals(left: Vector4, right: Vector4) -> Bool {
         MathUtil.equals(left.x, right.x) &&
-                MathUtil.equals(left.y, right.y) &&
-                MathUtil.equals(left.z, right.z) &&
-                MathUtil.equals(left.w, right.w)
+            MathUtil.equals(left.y, right.y) &&
+            MathUtil.equals(left.z, right.z) &&
+            MathUtil.equals(left.w, right.w)
     }
 
     /// Performs a linear interpolation between two vectors.
@@ -229,7 +227,7 @@ extension Vector4 {
     ///   - right: The second vector
     ///   - t: The blend amount where 0 returns left and 1 right
     /// - Returns: The result of linear blending between two vectors
-    public static func lerp(left: Vector4, right: Vector4, t: Float) -> Vector4 {
+    static func lerp(left: Vector4, right: Vector4, t: Float) -> Vector4 {
         Vector4(mix(left.elements, right.elements, t: t))
     }
 
@@ -238,7 +236,7 @@ extension Vector4 {
     ///   - left: The first vector
     ///   - right: The second vector
     /// - Returns: The vector containing the largest components of the specified vectors
-    public static func max(left: Vector4, right: Vector4) -> Vector4 {
+    static func max(left: Vector4, right: Vector4) -> Vector4 {
         Vector4(simd_max(left.elements, right.elements))
     }
 
@@ -247,20 +245,20 @@ extension Vector4 {
     ///   - left: The first vector
     ///   - right: The second vector
     /// - Returns: The vector containing the smallest components of the specified vectors
-    public static func min(left: Vector4, right: Vector4) -> Vector4 {
+    static func min(left: Vector4, right: Vector4) -> Vector4 {
         Vector4(simd_min(left.elements, right.elements))
     }
 }
 
-//MARK: - Static Method: Transformation
+// MARK: - Static Method: Transformation
 
-extension Vector4 {
+public extension Vector4 {
     /// Performs a transformation using the given quaternion.
     /// - Parameters:
     ///   - v: The vector to transform
     ///   - q: The transform quaternion
     /// - Returns: The transformed vector
-    public static func transformByQuat(v: Vector4, q: Quaternion) -> Vector4 {
+    static func transformByQuat(v: Vector4, q: Quaternion) -> Vector4 {
         let x = v.x
         let y = v.y
         let z = v.z
@@ -278,15 +276,15 @@ extension Vector4 {
 
         // calculate result * inverse quat
         return Vector4(ix * qw - iw * qx - iy * qz + iz * qy,
-                iy * qw - iw * qy - iz * qx + ix * qz,
-                iz * qw - iw * qz - ix * qy + iy * qx,
-                w)
+                       iy * qw - iw * qy - iz * qx + ix * qz,
+                       iz * qw - iw * qz - ix * qy + iy * qx,
+                       w)
     }
 }
 
-//MARK: - Class Method
+// MARK: - Class Method
 
-extension Vector4 {
+public extension Vector4 {
     /// Set the value of this vector.
     /// - Parameters:
     ///   - x: The x component of the vector
@@ -294,7 +292,7 @@ extension Vector4 {
     ///   - z: The z component of the vector
     ///   - w: The w component of the vector
     /// - Returns: This vector
-    mutating func set(x: Float, y: Float, z: Float, w: Float) -> Vector4 {
+    internal mutating func set(x: Float, y: Float, z: Float, w: Float) -> Vector4 {
         elements = SIMD4<Float>(x, y, z, w)
         return self
     }
@@ -304,18 +302,18 @@ extension Vector4 {
     ///   - array: The array
     ///   - offset: The start offset of the array
     /// - Returns: This vector
-    mutating func set(array: Array<Float>, offset: Int = 0) -> Vector4 {
+    internal mutating func set(array: [Float], offset: Int = 0) -> Vector4 {
         elements = SIMD4<Float>(array[offset],
-                array[offset + 1],
-                array[offset + 2],
-                array[offset + 3])
+                                array[offset + 1],
+                                array[offset + 2],
+                                array[offset + 3])
         return self
     }
 
     /// Determines the sum of this vector and the specified vector.
     /// - Parameter right: The specified vector
     /// - Returns: This vector
-    public mutating func add(right: Vector4) -> Vector4 {
+    mutating func add(right: Vector4) -> Vector4 {
         elements += right.elements
         return self
     }
@@ -323,7 +321,7 @@ extension Vector4 {
     /// Determines the difference of this vector and the specified vector.
     /// - Parameter right: The specified vector
     /// - Returns: This vector
-    public mutating func subtract(right: Vector4) -> Vector4 {
+    mutating func subtract(right: Vector4) -> Vector4 {
         elements -= right.elements
         return self
     }
@@ -331,7 +329,7 @@ extension Vector4 {
     /// Determines the product of this vector and the specified vector.
     /// - Parameter right: The specified vector
     /// - Returns: This vector
-    public mutating func multiply(right: Vector4) -> Vector4 {
+    mutating func multiply(right: Vector4) -> Vector4 {
         elements *= right.elements
         return self
     }
@@ -339,14 +337,14 @@ extension Vector4 {
     /// Determines the divisor of this vector and the specified vector.
     /// - Parameter right: The specified vector
     /// - Returns: This vector
-    public mutating func divide(right: Vector4) -> Vector4 {
+    mutating func divide(right: Vector4) -> Vector4 {
         elements /= right.elements
         return self
     }
 
     /// Reverses the direction of this vector.
     /// - Returns: This vector
-    public mutating func negate() -> Vector4 {
+    mutating func negate() -> Vector4 {
         elements = -elements
         return self
     }
@@ -354,22 +352,22 @@ extension Vector4 {
     /// Scale this vector by the given value.
     /// - Parameter s: The amount by which to scale the vector
     /// - Returns: This vector
-    public mutating func scale(s: Float) -> Vector4 {
+    mutating func scale(s: Float) -> Vector4 {
         elements *= s
         return self
     }
 }
 
-extension Vector4 {
+public extension Vector4 {
     /// Calculate the length of this vector.
     /// - Returns: The length of this vector
-    public func length() -> Float {
+    func length() -> Float {
         simd_length(elements)
     }
 
     /// Calculate the squared length of this vector.
     /// - Returns: The squared length of this vector
-    public func lengthSquared() -> Float {
+    func lengthSquared() -> Float {
         simd_length_squared(elements)
     }
 
@@ -377,7 +375,7 @@ extension Vector4 {
     /// - Parameters:
     ///   - out: The array
     ///   - outOffset: The start offset of the array
-    public func toArray(out: inout [Float], outOffset: Int = 0) {
+    func toArray(out: inout [Float], outOffset: Int = 0) {
         out[outOffset] = x
         out[outOffset + 1] = y
         out[outOffset + 2] = z
@@ -385,8 +383,8 @@ extension Vector4 {
     }
 }
 
-extension SIMD4<Float> {
-    public var xyz: SIMD3<Float> {
+public extension SIMD4<Float> {
+    var xyz: SIMD3<Float> {
         get {
             SIMD3<Float>(x, y, z)
         }
@@ -402,12 +400,12 @@ extension Vector4: Codable {
     enum CodingKeys: String, CodingKey {
         case element
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         elements = try container.decode(SIMD4<Float>.self, forKey: .element)
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(elements, forKey: .element)

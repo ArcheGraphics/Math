@@ -24,11 +24,11 @@ public struct Color32 {
         self.b = b
         self.a = a
     }
-    
+
     public init(rgba: UInt32) {
-        b = UInt8((rgba>>16) & 0xff)
-        g = UInt8((rgba>>8)  & 0xff)
-        r = UInt8((rgba)     & 0xff)
+        b = UInt8((rgba >> 16) & 0xFF)
+        g = UInt8((rgba >> 8) & 0xFF)
+        r = UInt8(rgba & 0xFF)
         a = 255
     }
 
@@ -36,9 +36,9 @@ public struct Color32 {
     public static func lerp(a: Color32, b: Color32, t: Float) -> Color32 {
         let t = MathUtil.clamp01(value: t)
         return Color32(r: UInt8(Double(a.r) + Double(Int(b.r) - Int(a.r)) * Double(t)),
-                g: UInt8(Double(a.g) + Double(Int(b.g) - Int(a.g)) * Double(t)),
-                b: UInt8(Double(a.b) + Double(Int(b.b) - Int(a.b)) * Double(t)),
-                a: UInt8(Double(a.a) + Double(Int(b.a) - Int(a.a)) * Double(t)))
+                       g: UInt8(Double(a.g) + Double(Int(b.g) - Int(a.g)) * Double(t)),
+                       b: UInt8(Double(a.b) + Double(Int(b.b) - Int(a.b)) * Double(t)),
+                       a: UInt8(Double(a.a) + Double(Int(b.a) - Int(a.a)) * Double(t)))
     }
 
     /// Linearly interpolates between colors a and b by t.
@@ -51,7 +51,7 @@ public struct Color32 {
 
     subscript(index: Int) -> UInt8 {
         get {
-            switch (index) {
+            switch index {
             case 0:
                 return r
             case 1:
@@ -65,19 +65,15 @@ public struct Color32 {
             }
         }
         set {
-            switch (index) {
+            switch index {
             case 0:
                 r = newValue
-                break
             case 1:
                 g = newValue
-                break
             case 2:
                 b = newValue
-                break
             case 3:
                 a = newValue
-                break
             default:
                 fatalError("Invalid Color32 index(\(index)!")
             }
@@ -92,7 +88,7 @@ extension Color32: Codable {
         case b
         case a
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         r = try container.decode(UInt8.self, forKey: .r)
@@ -100,7 +96,7 @@ extension Color32: Codable {
         b = try container.decode(UInt8.self, forKey: .b)
         a = try container.decode(UInt8.self, forKey: .a)
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(r, forKey: .r)
@@ -116,8 +112,8 @@ extension Color32: Equatable {
     }
 }
 
-extension Color {
-    public init(_ color32: Color32) {
+public extension Color {
+    init(_ color32: Color32) {
         elements = SIMD4<Float>(Float(color32.r) / 255,
                                 Float(color32.g) / 255,
                                 Float(color32.b) / 255,

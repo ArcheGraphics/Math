@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import XCTest
 @testable import Math
+import XCTest
 
 class BoundingSphereTests: XCTestCase {
     override func setUpWithError() throws {
@@ -28,7 +28,7 @@ class BoundingSphereTests: XCTestCase {
             Vector3(-1, -0.5, -0.5),
             Vector3(0, -0.5, -0.5),
             Vector3(1, 0, -1),
-            Vector3(0, -1, 0)
+            Vector3(0, -1, 0),
         ]
         let sphere1 = BoundingSphere.fromPoints(points: points)
 

@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import XCTest
 @testable import Math
+import XCTest
 
 class Vector2Tests: XCTestCase {
     override func setUpWithError() throws {

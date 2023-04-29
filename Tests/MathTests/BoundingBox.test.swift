@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import XCTest
 @testable import Math
+import XCTest
 
 class BoundingBoxTests: XCTestCase {
     override func setUpWithError() throws {
@@ -30,7 +30,7 @@ class BoundingBoxTests: XCTestCase {
             Vector3(0, 0.5, 0.5),
             Vector3(0, -0.5, 0.5),
             Vector3(0, -1, 0.5),
-            Vector3(0, 0, -1)
+            Vector3(0, 0, -1),
         ]
         let box2 = BoundingBox.fromPoints(points: points)
 
@@ -57,9 +57,9 @@ class BoundingBoxTests: XCTestCase {
     func testTransform() {
         var box = BoundingBox(Vector3(-1, -1, -1), Vector3(1, 1, 1))
         let matrix = Matrix(m11: 2, m12: 0, m13: 0, m14: 0,
-                m21: 0, m22: 2, m23: 0, m24: 0,
-                m31: 0, m32: 0, m33: 2, m34: 0,
-                m41: 1, m42: 0.5, m43: -1, m44: 1)
+                            m21: 0, m22: 2, m23: 0, m24: 0,
+                            m31: 0, m32: 0, m33: 2, m34: 0,
+                            m41: 1, m42: 0.5, m43: -1, m44: 1)
         let newBox = BoundingBox.transform(source: box, matrix: matrix)
         _ = box.transform(matrix: matrix)
 
@@ -108,7 +108,7 @@ class BoundingBoxTests: XCTestCase {
             Vector3(),
             Vector3(),
             Vector3(),
-            Vector3()
+            Vector3(),
         ]
         _ = expectedCorners[0].set(x: minX, y: maxY, z: maxZ)
         _ = expectedCorners[1].set(x: maxX, y: maxY, z: maxZ)
@@ -121,7 +121,7 @@ class BoundingBoxTests: XCTestCase {
 
         let box = BoundingBox(min, max)
         let corners = box.getCorners()
-        for i in 0..<8 {
+        for i in 0 ..< 8 {
             XCTAssertEqual(Vector3.equals(left: corners[i], right: expectedCorners[i]), true)
         }
     }

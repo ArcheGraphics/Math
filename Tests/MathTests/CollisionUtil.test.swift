@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import XCTest
 @testable import Math
+import XCTest
 
 class CollisionUtilTests: XCTestCase {
     var plane: Plane!
@@ -14,13 +14,13 @@ class CollisionUtilTests: XCTestCase {
     override func setUpWithError() throws {
         plane = Plane(Vector3(0, 1, 0), -5)
         let viewMatrix = Matrix(m11: 1, m12: 0, m13: 0, m14: 0,
-                m21: 0, m22: 1, m23: 0, m24: 0,
-                m31: 0, m32: 0, m33: 1, m34: 0,
-                m41: 0, m42: 0, m43: -20, m44: 1)
+                                m21: 0, m22: 1, m23: 0, m24: 0,
+                                m31: 0, m32: 0, m33: 1, m34: 0,
+                                m41: 0, m42: 0, m43: -20, m44: 1)
         let projectionMatrix = Matrix(m11: 0.03954802080988884, m12: 0, m13: 0, m14: 0,
-                m21: 0, m22: 0.10000000149011612, m23: 0, m24: 0,
-                m31: 0, m32: 0, m33: -0.0200200192630291, m34: 0,
-                m41: -0, m42: -0, m43: -1.0020020008087158, m44: 1)
+                                      m21: 0, m22: 0.10000000149011612, m23: 0, m24: 0,
+                                      m31: 0, m32: 0, m33: -0.0200200192630291, m34: 0,
+                                      m41: -0, m42: -0, m43: -1.0020020008087158, m44: 1)
         let vpMatrix = projectionMatrix * viewMatrix
         frustum = BoundingFrustum(matrix: vpMatrix)
     }

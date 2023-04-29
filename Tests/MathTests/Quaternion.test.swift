@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import XCTest
 @testable import Math
+import XCTest
 
 class QuaternionTests: XCTestCase {
     override func setUpWithError() throws {
@@ -94,26 +94,29 @@ class QuaternionTests: XCTestCase {
         XCTAssertEqual(Quaternion.equals(left: out, right: Quaternion(x: 2, y: 0.75, z: 1.25, w: -0.25)), true)
         out = Quaternion(a3)
         XCTAssertEqual(
-                Quaternion.equals(
-                        left: out,
-                        right: Quaternion(x: 0.8017837257372732, y: 1.8708286933869707, z: 1.8708286933869709, w: 0.5345224838248488)
-                ), true)
+            Quaternion.equals(
+                left: out,
+                right: Quaternion(x: 0.8017837257372732, y: 1.8708286933869707, z: 1.8708286933869709, w: 0.5345224838248488)
+            ), true
+        )
         out = Quaternion(a4)
         XCTAssertEqual(
-                Quaternion.equals(
-                        left: out,
-                        right: Quaternion(x: 1.066003581778052, y: 1.4924050144892729, z: 2.345207879911715, w: -0.21320071635561041)
-                ), true)
+            Quaternion.equals(
+                left: out,
+                right: Quaternion(x: 1.066003581778052, y: 1.4924050144892729, z: 2.345207879911715, w: -0.21320071635561041)
+            ), true
+        )
     }
 
     func testStaticInvert() {
         let a = Quaternion(x: 1, y: 1, z: 1, w: 0.5)
         let out = a.invert
         XCTAssertEqual(
-                Quaternion.equals(
-                        left: out,
-                        right: Quaternion(x: -0.3076923076923077, y: -0.3076923076923077, z: -0.3076923076923077, w: 0.15384615384615385)
-                ), true)
+            Quaternion.equals(
+                left: out,
+                right: Quaternion(x: -0.3076923076923077, y: -0.3076923076923077, z: -0.3076923076923077, w: 0.15384615384615385)
+            ), true
+        )
     }
 
     func testStaticSlerp() {

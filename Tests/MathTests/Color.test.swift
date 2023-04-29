@@ -4,9 +4,9 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import XCTest
-import simd
 @testable import Math
+import simd
+import XCTest
 
 class ColorTests: XCTestCase {
     override func setUpWithError() throws {
@@ -83,18 +83,18 @@ class ColorTests: XCTestCase {
     func testLinearAndGamma() {
         let fixColor = { (color: inout Color) in
             color.set(r: floor(color.r * 1000) / 1000,
-                    g: floor(color.g * 1000) / 1000,
-                    b: floor(color.b * 1000) / 1000, a: 1)
+                      g: floor(color.g * 1000) / 1000,
+                      b: floor(color.b * 1000) / 1000, a: 1)
         }
 
         var colorLinear = Color()
         var colorGamma = Color()
         var colorNewLinear = Color()
 
-        for _ in 0..<100 {
-            _ = colorLinear.set(r: Float.random(in: 0..<1),
-                    g: Float.random(in: 0..<1),
-                    b: Float.random(in: 0..<1), a: 1)
+        for _ in 0 ..< 100 {
+            _ = colorLinear.set(r: Float.random(in: 0 ..< 1),
+                                g: Float.random(in: 0 ..< 1),
+                                b: Float.random(in: 0 ..< 1), a: 1)
             _ = fixColor(&colorLinear)
 
             colorGamma = colorLinear.toGamma()

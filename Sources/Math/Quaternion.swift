@@ -47,32 +47,26 @@ public struct Quaternion {
     }
 
     public var axis: Vector3 {
-        get {
-            Vector3(elements.axis)
-        }
+        Vector3(elements.axis)
     }
 
     public var angle: Float {
-        get {
-            elements.angle
-        }
+        elements.angle
     }
 
     public var internalValue: simd_quatf {
-        get {
-            elements
-        }
+        elements
     }
-    
+
     public var conjugate: Quaternion {
         Quaternion(elements.conjugate)
     }
-    
+
     /// Calculate the inverse of the specified quaternion.
     public var invert: Quaternion {
         Quaternion(elements.inverse)
     }
-    
+
     /// Converts the vector into a unit vector.
     /// - Parameters:
     ///   - left: The vector to normalize
@@ -94,15 +88,15 @@ public struct Quaternion {
     public init(x: Float = 0, y: Float = 0, z: Float = 0, w: Float = 1) {
         elements = simd_quatf(ix: x, iy: y, iz: z, r: w)
     }
-    
+
     public init(_ m: Matrix3x3) {
         elements = simd_quatf(m.elements)
     }
-    
+
     public init(_ m: Matrix) {
         elements = simd_quatf(m.elements)
     }
-    
+
     /// Calculate a quaternion rotates around an arbitrary axis.
     /// - Parameters:
     ///   - axis: The axis
@@ -111,7 +105,7 @@ public struct Quaternion {
     public init(axis: Vector3, rad: Float) {
         elements = simd_quatf(angle: rad, axis: axis.normalized.elements)
     }
-    
+
     public init(from: Vector3, to: Vector3) {
         elements = simd_quatf(from: from.elements, to: to.elements)
     }
@@ -124,31 +118,31 @@ public struct Quaternion {
     }
 }
 
-//MARK: - Static Methods
+// MARK: - Static Methods
 
-extension Quaternion {
+public extension Quaternion {
     /// Determines the sum of two vectors.
     /// - Parameters:
     ///   - left: The first vector to add
     ///   - right: The second vector to add
     /// - Returns: The sum of two vectors
-    public static func +(left: Quaternion, right: Quaternion) -> Quaternion {
+    static func + (left: Quaternion, right: Quaternion) -> Quaternion {
         Quaternion(left.elements + right.elements)
     }
 
-    public static func +=(left: inout Quaternion, right: Quaternion) {
+    static func += (left: inout Quaternion, right: Quaternion) {
         left.elements += right.elements
     }
-    
-    public static func -(left: Quaternion, right: Quaternion) -> Quaternion {
+
+    static func - (left: Quaternion, right: Quaternion) -> Quaternion {
         Quaternion(left.elements - right.elements)
     }
 
-    public static func -=(left: inout Quaternion, right: Quaternion) {
+    static func -= (left: inout Quaternion, right: Quaternion) {
         left.elements -= right.elements
     }
 
-    prefix public static func -(rhs: Quaternion) -> Quaternion {
+    static prefix func - (rhs: Quaternion) -> Quaternion {
         Quaternion(-rhs.elements)
     }
 
@@ -157,11 +151,11 @@ extension Quaternion {
     ///   - left: The first vector to multiply
     ///   - right: The second vector to multiply
     /// - Returns: The product of two vectors
-    public static func *(left: Quaternion, right: Quaternion) -> Quaternion {
+    static func * (left: Quaternion, right: Quaternion) -> Quaternion {
         Quaternion(left.elements * right.elements)
     }
 
-    public static func *=(left: inout Quaternion, right: Quaternion) {
+    static func *= (left: inout Quaternion, right: Quaternion) {
         left.elements *= right.elements
     }
 
@@ -170,34 +164,34 @@ extension Quaternion {
     ///   - left: The vector to scale
     ///   - s: The amount by which to scale the vector
     /// - Returns: The scaled vector
-    public static func *(left: Quaternion, s: Float) -> Quaternion {
+    static func * (left: Quaternion, s: Float) -> Quaternion {
         Quaternion(left.elements * s)
     }
 
-    public static func *(left: Float, s: Quaternion) -> Quaternion {
+    static func * (left: Float, s: Quaternion) -> Quaternion {
         Quaternion(left * s.elements)
     }
-    
-    public static func *=(left: inout Quaternion, right: Float) {
+
+    static func *= (left: inout Quaternion, right: Float) {
         left.elements *= right
     }
-    
-    public static func /(left: Quaternion, s: Float) -> Quaternion {
+
+    static func / (left: Quaternion, s: Float) -> Quaternion {
         Quaternion(left.elements / s)
     }
-    
-    public static func /=(left: inout Quaternion, right: Float) {
+
+    static func /= (left: inout Quaternion, right: Float) {
         left.elements /= right
     }
 }
 
-extension Quaternion {
+public extension Quaternion {
     /// Determines the dot product of two vectors.
     /// - Parameters:
     ///   - left: The first vector to dot
     ///   - right: The second vector to dot
     /// - Returns: The dot product of two vectors
-    public static func dot(left: Quaternion, right: Quaternion) -> Float {
+    static func dot(left: Quaternion, right: Quaternion) -> Float {
         simd_dot(left.elements, right.elements)
     }
 
@@ -206,11 +200,11 @@ extension Quaternion {
     ///   - left: The first vector to compare
     ///   - right: The second vector to compare
     /// - Returns: True if the specified vectors are equals, false otherwise
-    public static func equals(left: Quaternion, right: Quaternion) -> Bool {
+    static func equals(left: Quaternion, right: Quaternion) -> Bool {
         MathUtil.equals(left.x, right.x) &&
-                MathUtil.equals(left.y, right.y) &&
-                MathUtil.equals(left.z, right.z) &&
-                MathUtil.equals(left.w, right.w)
+            MathUtil.equals(left.y, right.y) &&
+            MathUtil.equals(left.z, right.z) &&
+            MathUtil.equals(left.w, right.w)
     }
 
     /// Calculate a quaternion from the specified yaw, pitch and roll angles.
@@ -219,7 +213,7 @@ extension Quaternion {
     ///   - pitch: Pitch around the x axis in radians
     ///   - roll: Roll around the z axis in radians
     /// - Returns: The calculated quaternion
-    public static func rotationYawPitchRoll(yaw: Float, pitch: Float, roll: Float) -> Quaternion {
+    static func rotationYawPitchRoll(yaw: Float, pitch: Float, roll: Float) -> Quaternion {
         let halfRoll = roll * 0.5
         let halfPitch = pitch * 0.5
         let halfYaw = yaw * 0.5
@@ -246,11 +240,11 @@ extension Quaternion {
     ///   - y: The radian of rotation around Y (yaw)
     ///   - z: The radian of rotation around Z (roll)
     /// - Returns: The calculated quaternion
-    public static func rotationEuler(x: Float, y: Float, z: Float) -> Quaternion {
+    static func rotationEuler(x: Float, y: Float, z: Float) -> Quaternion {
         Quaternion.rotationYawPitchRoll(yaw: y, pitch: x, roll: z)
     }
-    
-    public static func euler(_ e: Vector3) -> Quaternion {
+
+    static func euler(_ e: Vector3) -> Quaternion {
         Quaternion.rotationYawPitchRoll(yaw: e.y, pitch: e.x, roll: e.z)
     }
 
@@ -260,7 +254,7 @@ extension Quaternion {
     ///   - end: The second quaternion
     ///   - t: The blend amount where 0 returns start and 1 end
     /// - Returns: The result of spherical linear blending between two quaternions
-    public static func slerp(start: Quaternion, end: Quaternion, t: Float) -> Quaternion {
+    static func slerp(start: Quaternion, end: Quaternion, t: Float) -> Quaternion {
         Quaternion(simd_slerp(start.elements, end.elements, t))
     }
 
@@ -268,7 +262,7 @@ extension Quaternion {
     /// - Parameters:
     ///   - rad: The rotation angle in radians
     /// - Returns: The calculated quaternion
-    public static func rotationX(rad: Float) -> Quaternion {
+    static func rotationX(rad: Float) -> Quaternion {
         let rad = rad * 0.5
         let s = sin(rad)
         let c = cos(rad)
@@ -280,7 +274,7 @@ extension Quaternion {
     /// - Parameters:
     ///   - rad: The rotation angle in radians
     /// - Returns: The calculated quaternion
-    public static func rotationY(rad: Float) -> Quaternion {
+    static func rotationY(rad: Float) -> Quaternion {
         let rad = rad * 0.5
         let s = sin(rad)
         let c = cos(rad)
@@ -292,7 +286,7 @@ extension Quaternion {
     /// - Parameters:
     ///   - rad: The rotation angle in radians
     /// - Returns: The calculated quaternion
-    public static func rotationZ(rad: Float) -> Quaternion {
+    static func rotationZ(rad: Float) -> Quaternion {
         let rad = rad * 0.5
         let s = sin(rad)
         let c = cos(rad)
@@ -305,7 +299,7 @@ extension Quaternion {
     ///   - quaternion: The specified quaternion
     ///   - rad: The rotation angle in radians
     /// - Returns: The calculated quaternion
-    public static func rotateX(quaternion: Quaternion, rad: Float) -> Quaternion {
+    static func rotateX(quaternion: Quaternion, rad: Float) -> Quaternion {
         let x = quaternion.x
         let y = quaternion.y
         let z = quaternion.z
@@ -325,7 +319,7 @@ extension Quaternion {
     ///   - quaternion: The specified quaternion
     ///   - rad: The rotation angle in radians
     /// - Returns: The calculated quaternion
-    public static func rotateY(quaternion: Quaternion, rad: Float) -> Quaternion {
+    static func rotateY(quaternion: Quaternion, rad: Float) -> Quaternion {
         let x = quaternion.x
         let y = quaternion.y
         let z = quaternion.z
@@ -345,7 +339,7 @@ extension Quaternion {
     ///   - quaternion: The specified quaternion
     ///   - rad: The rotation angle in radians
     /// - Returns: The calculated quaternion
-    public static func rotateZ(quaternion: Quaternion, rad: Float) -> Quaternion {
+    static func rotateZ(quaternion: Quaternion, rad: Float) -> Quaternion {
         let x = quaternion.x
         let y = quaternion.y
         let z = quaternion.z
@@ -361,7 +355,7 @@ extension Quaternion {
     }
 
     /// Returns the angle in degrees between two rotations a and b.
-    public static func angle(_ a: Quaternion, _ b: Quaternion) -> Float {
+    static func angle(_ a: Quaternion, _ b: Quaternion) -> Float {
         let num = min(abs(Quaternion.dot(left: a, right: b)), 1)
         return Quaternion.isEqualUsingDot(num) ? 0.0 : (acos(num) * 2.0 * 57.295780181884766)
     }
@@ -371,7 +365,7 @@ extension Quaternion {
     }
 }
 
-extension Quaternion {
+public extension Quaternion {
     /// Set the value of this vector.
     /// - Parameters:
     ///   - x: The x component of the vector
@@ -379,7 +373,7 @@ extension Quaternion {
     ///   - z: The z component of the vector
     ///   - w: The w component of the vector
     /// - Returns: This vector
-    mutating func set(x: Float, y: Float, z: Float, w: Float) -> Quaternion {
+    internal mutating func set(x: Float, y: Float, z: Float, w: Float) -> Quaternion {
         elements = simd_quatf(ix: x, iy: y, iz: z, r: w)
         return self
     }
@@ -389,18 +383,18 @@ extension Quaternion {
     ///   - array: The array
     ///   - offset: The start offset of the array
     /// - Returns: This vector
-    mutating func set(array: Array<Float>, offset: Int = 0) -> Quaternion {
+    internal mutating func set(array: [Float], offset: Int = 0) -> Quaternion {
         elements = simd_quatf(ix: array[offset],
-                iy: array[offset + 1],
-                iz: array[offset + 2],
-                r: array[offset + 2])
+                              iy: array[offset + 1],
+                              iz: array[offset + 2],
+                              r: array[offset + 2])
         return self
     }
 
     /// Calculate this quaternion rotate around X axis.
     /// - Parameter rad: The rotation angle in radians
     /// - Returns: This quaternion
-    public mutating func rotateX(rad: Float) -> Quaternion {
+    mutating func rotateX(rad: Float) -> Quaternion {
         self = Quaternion.rotateX(quaternion: self, rad: rad)
         return self
     }
@@ -408,7 +402,7 @@ extension Quaternion {
     /// Calculate this quaternion rotate around Y axis.
     /// - Parameter rad: The rotation angle in radians
     /// - Returns: This quaternion
-    public mutating func rotateY(rad: Float) -> Quaternion {
+    mutating func rotateY(rad: Float) -> Quaternion {
         self = Quaternion.rotateY(quaternion: self, rad: rad)
         return self
     }
@@ -416,7 +410,7 @@ extension Quaternion {
     /// Calculate this quaternion rotate around Z axis.
     /// - Parameter rad: The rotation angle in radians
     /// - Returns: This quaternion
-    public mutating func rotateZ(rad: Float) -> Quaternion {
+    mutating func rotateZ(rad: Float) -> Quaternion {
         self = Quaternion.rotateZ(quaternion: self, rad: rad)
         return self
     }
@@ -426,42 +420,42 @@ extension Quaternion {
     ///   - quat: The specified quaternion
     ///   - t: The blend amount where 0 returns this and 1 quat
     /// - Returns: The result of linear blending between two quaternions
-    public mutating func lerp(quat: Quaternion, t: Float) -> Quaternion {
+    mutating func lerp(quat: Quaternion, t: Float) -> Quaternion {
         self = Quaternion.slerp(start: self, end: quat, t: t)
         return self
     }
 }
 
-extension Quaternion {
+public extension Quaternion {
     /// Determines the dot product of this quaternion and the specified quaternion.
     /// - Parameter quat: The specified quaternion
     /// - Returns: The dot product of two quaternions
-    public func dot(quat: Quaternion) -> Float {
+    func dot(quat: Quaternion) -> Float {
         Quaternion.dot(left: self, right: quat)
     }
 
     /// Calculate the length of this quaternion.
     /// - Returns: The length of this quaternion
-    public func length() -> Float {
+    func length() -> Float {
         elements.length
     }
 
     /// Calculates the squared length of this quaternion.
     /// - Returns: The squared length of this quaternion
-    public func lengthSquared() -> Float {
+    func lengthSquared() -> Float {
         x * x + y * y + z * z + w * w
     }
 
     /// Get the euler of this quaternion.
     /// - Returns: Euler x->pitch y->yaw z->roll
-    public func toEuler() -> Vector3 {
+    func toEuler() -> Vector3 {
         let out = toYawPitchRoll()
         return Vector3(out.y, out.x, out.z)
     }
 
     /// Get the euler of this quaternion.
     /// - Returns: Euler x->yaw y->pitch z->roll
-    public func toYawPitchRoll() -> Vector3 {
+    func toYawPitchRoll() -> Vector3 {
         let xx = x * x
         let yy = y * y
         let zz = z * z
@@ -475,7 +469,7 @@ extension Quaternion {
         let y = asin(2.0 * (xw - yz))
         var x: Float = 0
         var z: Float = 0
-        if (cos(y) > Float.leastNonzeroMagnitude) {
+        if cos(y) > Float.leastNonzeroMagnitude {
             z = atan2(2.0 * (xy + zw), 1.0 - 2.0 * (zz + xx))
             x = atan2(2.0 * (zx + yw), 1.0 - 2.0 * (yy + xx))
         } else {
@@ -490,7 +484,7 @@ extension Quaternion {
     /// - Parameters:
     ///   - out: The array
     ///   - outOffset: The start offset of the array
-    public func toArray(out: inout [Float], outOffset: Int = 0) {
+    func toArray(out: inout [Float], outOffset: Int = 0) {
         out[outOffset] = x
         out[outOffset + 1] = y
         out[outOffset + 2] = z
@@ -500,12 +494,12 @@ extension Quaternion {
 
 extension Quaternion: Codable {
     enum CodingKeys: String, CodingKey {
-       case x
-       case y
-       case z
-       case w
+        case x
+        case y
+        case z
+        case w
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(x, forKey: .x)

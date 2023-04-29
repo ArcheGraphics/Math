@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import XCTest
 @testable import Math
+import XCTest
 
 class Vector3Tests: XCTestCase {
     override func setUpWithError() throws {
@@ -139,9 +139,9 @@ class Vector3Tests: XCTestCase {
     func testStaticTransform() {
         let a = Vector3(2, 3, 4)
         let m44 = Matrix(m11: 2, m12: 7, m13: 17, m14: 0,
-                m21: 3, m22: 11, m23: 19, m24: 0,
-                m31: 5, m32: 13, m33: 23, m34: 0,
-                m41: 0, m42: 0, m43: 0, m44: 1)
+                         m21: 3, m22: 11, m23: 19, m24: 0,
+                         m31: 5, m32: 13, m33: 23, m34: 0,
+                         m41: 0, m42: 0, m43: 0, m44: 1)
         var out = Vector3.transformNormal(v: a, m: m44)
         XCTAssertEqual(out.x, 33)
         XCTAssertEqual(out.y, 99)
@@ -149,9 +149,9 @@ class Vector3Tests: XCTestCase {
 
         let b = Vector4(2, 3, 4, 1)
         let m4 = Matrix(m11: 1, m12: 0, m13: 0, m14: 0,
-                m21: 0, m22: 1, m23: 0, m24: 0,
-                m31: 0, m32: 0, m33: 1, m34: 0,
-                m41: 0, m42: 0, m43: 1, m44: 1)
+                        m21: 0, m22: 1, m23: 0, m24: 0,
+                        m31: 0, m32: 0, m33: 1, m34: 0,
+                        m41: 0, m42: 0, m43: 1, m44: 1)
         out = Vector3.transformCoordinate(v: a, m: m4)
         let out4 = m4 * b
         XCTAssertEqual(out.x, out4.x / out4.w)
@@ -293,9 +293,9 @@ class Vector3Tests: XCTestCase {
         var a = Vector3(2, 3, 4)
         let out = Vector3(2, 3, 5)
         let m = Matrix(m11: 1, m12: 0, m13: 0, m14: 0,
-                m21: 0, m22: 1, m23: 0, m24: 0,
-                m31: 0, m32: 0, m33: 1, m34: 0,
-                m41: 0, m42: 0, m43: 1, m44: 1)
+                       m21: 0, m22: 1, m23: 0, m24: 0,
+                       m31: 0, m32: 0, m33: 1, m34: 0,
+                       m41: 0, m42: 0, m43: 1, m44: 1)
         _ = a.transformToVec3(m: m)
         XCTAssertEqual(a.x, out.x)
         XCTAssertEqual(a.y, out.y)
@@ -306,9 +306,9 @@ class Vector3Tests: XCTestCase {
         let a = Vector3(2, 3, 4)
         let b = Vector4(2, 3, 4, 1)
         let m4 = Matrix(m11: 1, m12: 0, m13: 0, m14: 0,
-                m21: 0, m22: 1, m23: 0, m24: 0,
-                m31: 0, m32: 0, m33: 1, m34: 0,
-                m41: 0, m42: 0, m43: 1, m44: 1)
+                        m21: 0, m22: 1, m23: 0, m24: 0,
+                        m31: 0, m32: 0, m33: 1, m34: 0,
+                        m41: 0, m42: 0, m43: 1, m44: 1)
         let out = Vector3.transformCoordinate(v: a, m: m4)
         let out4 = m4 * b
         XCTAssertEqual(out.x, out4.x / out4.w)

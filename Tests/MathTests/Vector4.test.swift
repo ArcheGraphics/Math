@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import XCTest
 @testable import Math
+import XCTest
 
 class Vector4Tests: XCTestCase {
     override func setUpWithError() throws {
@@ -139,9 +139,9 @@ class Vector4Tests: XCTestCase {
     func testStaticTransform() {
         let a = Vector4(2, 3, 4, 5)
         let m4 = Matrix(m11: 1, m12: 0, m13: 0, m14: 0,
-                m21: 0, m22: 1, m23: 0, m24: 0,
-                m31: 0, m32: 0, m33: 1, m34: 0,
-                m41: 0, m42: 0, m43: 1, m44: 0)
+                        m21: 0, m22: 1, m23: 0, m24: 0,
+                        m31: 0, m32: 0, m33: 1, m34: 0,
+                        m41: 0, m42: 0, m43: 1, m44: 0)
         var out = m4 * a
         XCTAssertEqual(out.x, 2)
         XCTAssertEqual(out.y, 3)

@@ -9,22 +9,18 @@ import simd
 /// Represents a plane in three dimensional space.
 public struct Plane {
     /// The normal of the plane.
-    var _normal: Vector3 = Vector3()
+    var _normal: Vector3 = .init()
     /// The distance of the plane along its normal to the origin.
     var _distance: Float = 0
 
     public var normal: Vector3 {
-        get {
-            _normal
-        }
+        _normal
     }
 
     public var distance: Float {
-        get {
-            _distance
-        }
+        _distance
     }
-    
+
     /// Normalize the normal vector of the specified plane.
     /// - Parameters:
     ///   - p: The specified plane
@@ -33,11 +29,11 @@ public struct Plane {
         let factor = 1.0 / _normal.length()
         return Plane(_normal * factor, _distance * factor)
     }
-    
+
     /// Creates a plane.
     public init(_ inNormal: Vector3, _ inPoint: Vector3) {
         _normal = inNormal.normalized
-        _distance = -Vector3.dot(left: _normal, right: inPoint);
+        _distance = -Vector3.dot(left: _normal, right: inPoint)
     }
 
     /// Constructor of Plane.
@@ -50,7 +46,7 @@ public struct Plane {
         }
         _distance = distance
     }
-    
+
     /// Sets a plane using a point that lies within it along with a normal to orient it.
     /// - Parameters:
     ///   - inNormal: The plane's normal vector.
@@ -61,16 +57,14 @@ public struct Plane {
     }
 }
 
-extension Plane {
-
-
+public extension Plane {
     /// Calculate the plane that contains the three specified points.
     /// - Parameters:
     ///   - point0: The first point
     ///   - point1: The second point
     ///   - point2: The third point
     /// - Returns: The calculated plane
-    public static func fromPoints(point0: Vector3, point1: Vector3, point2: Vector3) -> Plane {
+    static func fromPoints(point0: Vector3, point1: Vector3, point2: Vector3) -> Plane {
         let x0 = point0.x
         let y0 = point0.y
         let z0 = point0.z
@@ -98,13 +92,13 @@ extension Plane: Codable {
         case normal
         case distance
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         _normal = try container.decode(Vector3.self, forKey: .normal)
         _distance = try container.decode(Float.self, forKey: .distance)
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(normal, forKey: .normal)

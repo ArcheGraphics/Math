@@ -9,21 +9,17 @@ import Foundation
 /// A bounding sphere.
 public struct BoundingSphere {
     /// The center point of the sphere.
-    var _center: Vector3 = Vector3()
+    var _center: Vector3 = .init()
 
     /// The radius of the sphere.
     var _radius: Float = 0
 
     public var center: Vector3 {
-        get {
-            _center
-        }
+        _center
     }
 
     public var radius: Float {
-        get {
-            _radius
-        }
+        _radius
     }
 
     /// Constructor of BoundingSphere.
@@ -38,13 +34,13 @@ public struct BoundingSphere {
     }
 }
 
-extension BoundingSphere {
+public extension BoundingSphere {
     /// Calculate a bounding sphere that fully contains the given points.
     /// - Parameters:
     ///   - points: The given points
     /// - Returns: The calculated bounding sphere
-    public static func fromPoints(points: [Vector3]) -> BoundingSphere {
-        if (points.count == 0) {
+    static func fromPoints(points: [Vector3]) -> BoundingSphere {
+        if points.count == 0 {
             fatalError("points must be array and length must > 0")
         }
 
@@ -52,13 +48,13 @@ extension BoundingSphere {
         var center = Vector3()
 
         // Calculate the center of the sphere.
-        for i in 0..<len {
+        for i in 0 ..< len {
             center = points[i] + center
         }
 
         // Calculate the radius of the sphere.
         var radius: Float = 0.0
-        for i in 0..<len {
+        for i in 0 ..< len {
             let distance = Vector3.distanceSquared(left: center, right: points[i])
             if distance > radius {
                 radius = distance
@@ -72,7 +68,7 @@ extension BoundingSphere {
     /// - Parameters:
     ///   - box: The given box
     /// - Returns: The calculated bounding sphere
-    public static func fromBox(box: BoundingBox) -> BoundingSphere {
+    static func fromBox(box: BoundingBox) -> BoundingSphere {
         let min = box.min
         let max = box.max
         let center = Vector3((min.x + max.x) * 0.5, (min.y + max.y) * 0.5, (min.z + max.z) * 0.5)
@@ -85,13 +81,13 @@ extension BoundingSphere: Codable {
         case center
         case radius
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         _center = try container.decode(Vector3.self, forKey: .center)
         _radius = try container.decode(Float.self, forKey: .radius)
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(_center, forKey: .center)

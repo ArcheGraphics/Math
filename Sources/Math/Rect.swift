@@ -38,7 +38,7 @@ public struct Rect {
     }
 
     /// <Shorthand for writing new Rect(0,0,0,0).
-    public static let zero: Rect = Rect(x: 0.0, y: 0.0, width: 0.0, height: 0.0)
+    public static let zero: Rect = .init(x: 0.0, y: 0.0, width: 0.0, height: 0.0)
 
     /// Creates a rectangle from min/max coordinate values.
     /// - Parameters:
@@ -221,20 +221,20 @@ public struct Rect {
     ///   - point: Point to test.
     ///   - allowInverse: Does the test allow the Rect's width and height to be negative?
     /// - Returns: True if the point lies within the specified rectangle.
-    public func Contains( point:Vector3,  allowInverse:Bool) -> Bool {
+    public func Contains(point: Vector3, allowInverse: Bool) -> Bool {
         !allowInverse ? Contains(point: point) :
-        (width < 0.0 && point.x <= xMin && point.x > xMax || width >= 0.0 && point.x >= xMin && point.x < xMax)
-        && (height < 0.0 && point.y <= yMin && point.y > yMax || height >= 0.0 && point.y >= yMin && point.y < yMax)
+            (width < 0.0 && point.x <= xMin && point.x > xMax || width >= 0.0 && point.x >= xMin && point.x < xMax)
+            && (height < 0.0 && point.y <= yMin && point.y > yMax || height >= 0.0 && point.y >= yMin && point.y < yMax)
     }
 
     private static func OrderMinMax(rect: Rect) -> Rect {
         var rect = rect
-        if (rect.xMin > rect.xMax) {
+        if rect.xMin > rect.xMax {
             let xMin = rect.xMin
             rect.xMin = rect.xMax
             rect.xMax = xMin
         }
-        if (rect.yMin > rect.yMax) {
+        if rect.yMin > rect.yMax {
             let yMin = rect.yMin
             rect.yMin = rect.yMax
             rect.yMax = yMin
@@ -259,13 +259,13 @@ public struct Rect {
     /// - Returns: Overlaps
     public mutating func Overlaps(other: Rect, allowInverse: Bool) -> Bool {
         var other = other
-        if (allowInverse) {
+        if allowInverse {
             self = Rect.OrderMinMax(rect: self)
             other = Rect.OrderMinMax(rect: other)
         }
-        return self.Overlaps(other: other)
+        return Overlaps(other: other)
     }
-    
+
     /// Returns a point inside a rectangle, given normalized coordinates.
     /// - Parameters:
     ///   - rectangle: Rectangle to get a point inside.
@@ -294,7 +294,7 @@ extension Rect: Codable {
         case width
         case height
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         m_XMin = try container.decode(Float.self, forKey: .xMin)
@@ -302,7 +302,7 @@ extension Rect: Codable {
         m_Width = try container.decode(Float.self, forKey: .width)
         m_Height = try container.decode(Float.self, forKey: .height)
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(m_XMin, forKey: .xMin)

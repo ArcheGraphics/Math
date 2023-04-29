@@ -22,39 +22,27 @@ public struct BoundingFrustum {
     var _bottom: Plane
 
     public var near: Plane {
-        get {
-            _near
-        }
+        _near
     }
 
     public var far: Plane {
-        get {
-            _far
-        }
+        _far
     }
 
     public var left: Plane {
-        get {
-            _left
-        }
+        _left
     }
 
     public var right: Plane {
-        get {
-            _right
-        }
+        _right
     }
 
     public var top: Plane {
-        get {
-            _top
-        }
+        _top
     }
 
     public var bottom: Plane {
-        get {
-            _bottom
-        }
+        _bottom
     }
 
     /// Constructor of BoundingFrustum.
@@ -73,16 +61,16 @@ public struct BoundingFrustum {
     }
 }
 
-extension BoundingFrustum {
-    public func getPlane(index: Int) -> Plane {
+public extension BoundingFrustum {
+    func getPlane(index: Int) -> Plane {
         getPlane(face: FrustumFace(rawValue: index) ?? FrustumFace.Top)
     }
 
     /// Get the plane by the given face.
     /// - Parameter face - The frustum face
     /// - Returns: The plane get
-    public func getPlane(face: FrustumFace) -> Plane {
-        switch (face) {
+    func getPlane(face: FrustumFace) -> Plane {
+        switch face {
         case FrustumFace.Near:
             return near
         case FrustumFace.Far:
@@ -100,7 +88,7 @@ extension BoundingFrustum {
 
     /// Update all planes from the given matrix.
     /// - Parameter matrix: The given view-projection matrix
-    public mutating func calculateFromMatrix(matrix: Matrix) {
+    mutating func calculateFromMatrix(matrix: Matrix) {
         let m11 = matrix.elements.columns.0[0]
         let m12 = matrix.elements.columns.0[1]
         let m13 = matrix.elements.columns.0[2]
@@ -149,14 +137,14 @@ extension BoundingFrustum {
     /// Get whether or not a specified bounding box intersects with this frustum (Contains or Intersects).
     /// - Parameter box: The box for testing
     /// - Returns: True if bounding box intersects with this frustum, false otherwise
-    public func intersectsBox(box: BoundingBox) -> Bool {
+    func intersectsBox(box: BoundingBox) -> Bool {
         CollisionUtil.intersectsFrustumAndBox(frustum: self, box: box)
     }
 
     /// Get whether or not a specified bounding sphere intersects with this frustum (Contains or Intersects).
     /// - Parameter sphere: The sphere for testing
     /// - Returns: True if bounding sphere intersects with this frustum, false otherwise
-    public func intersectsSphere(sphere: BoundingSphere) -> Bool {
+    func intersectsSphere(sphere: BoundingSphere) -> Bool {
         CollisionUtil.frustumContainsSphere(frustum: self, sphere: sphere) != ContainmentType.Disjoint
     }
 }
@@ -170,7 +158,7 @@ extension BoundingFrustum: Codable {
         case top
         case bottom
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         _near = try container.decode(Plane.self, forKey: .near)
@@ -180,7 +168,7 @@ extension BoundingFrustum: Codable {
         _top = try container.decode(Plane.self, forKey: .top)
         _bottom = try container.decode(Plane.self, forKey: .bottom)
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(_near, forKey: .near)

@@ -33,7 +33,8 @@ public struct Matrix {
     public init(m11: Float = 1, m12: Float = 0, m13: Float = 0, m14: Float = 0,
                 m21: Float = 0, m22: Float = 1, m23: Float = 0, m24: Float = 0,
                 m31: Float = 0, m32: Float = 0, m33: Float = 1, m34: Float = 0,
-                m41: Float = 0, m42: Float = 0, m43: Float = 0, m44: Float = 1) {
+                m41: Float = 0, m42: Float = 0, m43: Float = 0, m44: Float = 1)
+    {
         elements = simd_float4x4([SIMD4<Float>(m11, m12, m13, m14),
                                   SIMD4<Float>(m21, m22, m23, m24),
                                   SIMD4<Float>(m31, m32, m33, m34),
@@ -48,81 +49,80 @@ public struct Matrix {
     }
 }
 
-//MARK: - Static Methods
+// MARK: - Static Methods
 
-extension Matrix {
+public extension Matrix {
     /// Determines the product of two matrices.
     /// - Parameters:
     ///   - left: The first matrix to multiply
     ///   - right: The second matrix to multiply
     /// - Returns: The product of the two matrices
-    public static func *(left: Matrix, right: Matrix) -> Matrix {
+    static func * (left: Matrix, right: Matrix) -> Matrix {
         Matrix(left.elements * right.elements)
     }
 
-    public static func *=(left: inout Matrix, right: Matrix) {
+    static func *= (left: inout Matrix, right: Matrix) {
         left.elements *= right.elements
     }
 
-    public static func *(left: Matrix, right: Vector4) -> Vector4 {
+    static func * (left: Matrix, right: Vector4) -> Vector4 {
         Vector4(left.elements * right.elements)
     }
-    
-    public static func *(left: Matrix, right: Float) -> Matrix {
+
+    static func * (left: Matrix, right: Float) -> Matrix {
         Matrix(left.elements * right)
     }
-    
-    public static func *(left: Float, right: Matrix) -> Matrix {
+
+    static func * (left: Float, right: Matrix) -> Matrix {
         Matrix(left * right.elements)
     }
 
-    public static func *=(left: inout Matrix, right: Float) {
+    static func *= (left: inout Matrix, right: Float) {
         left.elements *= right
     }
-    
-    public static func +(left: Matrix, right: Matrix) -> Matrix {
+
+    static func + (left: Matrix, right: Matrix) -> Matrix {
         Matrix(left.elements + right.elements)
     }
 
-    public static func +=(left: inout Matrix, right: Matrix) {
+    static func += (left: inout Matrix, right: Matrix) {
         left.elements += right.elements
     }
 
-    public static func -(left: Matrix, right: Matrix) -> Matrix {
+    static func - (left: Matrix, right: Matrix) -> Matrix {
         Matrix(left.elements - right.elements)
     }
 
-    public static func -=(left: inout Matrix, right: Matrix) {
+    static func -= (left: inout Matrix, right: Matrix) {
         left.elements -= right.elements
     }
-    
-    prefix public static func - (rhs: Matrix) -> Matrix {
+
+    static prefix func - (rhs: Matrix) -> Matrix {
         Matrix(-rhs.elements)
     }
 
-    
     /// Determines whether the specified matrices are equals.
     /// - Parameters:
     ///   - left: The first matrix to compare
     ///   - right: The second matrix to compare
     /// - Returns: True if the specified matrices are equals, false otherwise
-    public static func equals(left: Matrix, right: Matrix) -> Bool {
+    static func equals(left: Matrix, right: Matrix) -> Bool {
         MathUtil.equals(left.elements.columns.0[0], right.elements.columns.0[0]) &&
-                MathUtil.equals(left.elements.columns.0[1], right.elements.columns.0[1]) &&
-                MathUtil.equals(left.elements.columns.0[2], right.elements.columns.0[2]) &&
-                MathUtil.equals(left.elements.columns.0[3], right.elements.columns.0[3]) &&
-                MathUtil.equals(left.elements.columns.1[0], right.elements.columns.1[0]) &&
-                MathUtil.equals(left.elements.columns.1[1], right.elements.columns.1[1]) &&
-                MathUtil.equals(left.elements.columns.1[2], right.elements.columns.1[2]) &&
-                MathUtil.equals(left.elements.columns.1[3], right.elements.columns.1[3]) &&
-                MathUtil.equals(left.elements.columns.2[0], right.elements.columns.2[0]) &&
-                MathUtil.equals(left.elements.columns.2[1], right.elements.columns.2[1]) &&
-                MathUtil.equals(left.elements.columns.2[2], right.elements.columns.2[2]) &&
-                MathUtil.equals(left.elements.columns.2[3], right.elements.columns.2[3]) &&
-                MathUtil.equals(left.elements.columns.3[0], right.elements.columns.3[0]) &&
-                MathUtil.equals(left.elements.columns.3[1], right.elements.columns.3[1]) &&
-                MathUtil.equals(left.elements.columns.3[2], right.elements.columns.3[2]) &&
-                MathUtil.equals(left.elements.columns.3[3], right.elements.columns.3[3])
+            MathUtil.equals(left.elements.columns.0[1], right.elements.columns.0[1]) &&
+            MathUtil.equals(left.elements.columns.0[2], right.elements.columns.0[2]) &&
+            MathUtil.equals(left.elements.columns.0[3], right.elements.columns.0[3]) &&
+            MathUtil.equals(left.elements.columns.1[0], right.elements.columns.1[0]) &&
+            MathUtil.equals(left.elements.columns.1[1], right.elements.columns.1[1]) &&
+            MathUtil.equals(left.elements.columns.1[2], right.elements.columns.1[2]) &&
+            MathUtil.equals(left.elements.columns.1[3], right.elements.columns.1[3]) &&
+            MathUtil.equals(left.elements.columns.2[0], right.elements.columns.2[0]) &&
+            MathUtil.equals(left.elements.columns.2[1], right.elements.columns.2[1]) &&
+            MathUtil.equals(left.elements.columns.2[2], right.elements.columns.2[2]) &&
+            MathUtil.equals(left.elements.columns.2[3], right.elements.columns.2[3]) &&
+            MathUtil.equals(left.elements.columns.3[0], right.elements.columns.3[0]) &&
+            MathUtil.equals(left.elements.columns.3[1], right.elements.columns.3[1]) &&
+            MathUtil.equals(left.elements.columns.3[2], right.elements.columns.3[2]) &&
+            MathUtil.equals(left.elements.columns.3[3], right.elements.columns.3[3])
     }
 
     /// Performs a linear interpolation between two matrices.
@@ -131,7 +131,7 @@ extension Matrix {
     ///   - end: The second matrix
     ///   - t: The blend amount where 0 returns start and 1 end
     /// - Returns: The result of linear blending between two matrices
-    public static func lerp(start: Matrix, end: Matrix, t: Float) -> Matrix {
+    static func lerp(start: Matrix, end: Matrix, t: Float) -> Matrix {
         Matrix(simd_linear_combination(1 - t, start.elements, t, end.elements))
     }
 
@@ -139,7 +139,7 @@ extension Matrix {
     /// - Parameters:
     ///   - quaternion: The quaternion used to calculate the matrix
     /// - Returns: The calculated rotation matrix
-    public static func rotationQuaternion(quaternion: Quaternion) -> Matrix {
+    static func rotationQuaternion(quaternion: Quaternion) -> Matrix {
         Matrix(matrix_float4x4(quaternion.elements))
     }
 
@@ -148,17 +148,16 @@ extension Matrix {
     ///   - axis: The axis
     ///   - r: The rotation angle in radians
     /// - Returns: The matrix after rotate
-    public static func rotationAxisAngle(axis: Vector3, r: Float) -> Matrix {
+    static func rotationAxisAngle(axis: Vector3, r: Float) -> Matrix {
         Matrix(matrix_float4x4(simd_quatf(angle: r, axis: axis.elements)))
     }
-
 
     /// Calculate a matrix from a quaternion and a translation.
     /// - Parameters:
     ///   - quaternion: The quaternion used to calculate the matrix
     ///   - translation: The translation used to calculate the matrix
     /// - Returns: The calculated matrix
-    public static func rotationTranslation(quaternion: Quaternion, translation: Vector3) -> Matrix {
+    static func rotationTranslation(quaternion: Quaternion, translation: Vector3) -> Matrix {
         var matrix = Matrix.rotationQuaternion(quaternion: quaternion)
         matrix.elements.columns.3[0] = translation.x
         matrix.elements.columns.3[1] = translation.y
@@ -172,7 +171,7 @@ extension Matrix {
     ///   - rotation: The rotation used to calculate matrix
     ///   - translation: The translation used to calculate matrix
     /// - Returns: The calculated matrix
-    public static func affineTransformation(scale: Vector3, rotation: Quaternion, translation: Vector3) -> Matrix {
+    static func affineTransformation(scale: Vector3, rotation: Quaternion, translation: Vector3) -> Matrix {
         let x = rotation.x
         let y = rotation.y
         let z = rotation.z
@@ -195,83 +194,83 @@ extension Matrix {
         let sz = scale.z
 
         return Matrix(m11: (1 - (yy + zz)) * sx,
-                m12: (xy + wz) * sx,
-                m13: (xz - wy) * sx,
-                m14: 0,
+                      m12: (xy + wz) * sx,
+                      m13: (xz - wy) * sx,
+                      m14: 0,
 
-                m21: (xy - wz) * sy,
-                m22: (1 - (xx + zz)) * sy,
-                m23: (yz + wx) * sy,
-                m24: 0,
+                      m21: (xy - wz) * sy,
+                      m22: (1 - (xx + zz)) * sy,
+                      m23: (yz + wx) * sy,
+                      m24: 0,
 
-                m31: (xz + wy) * sz,
-                m32: (yz - wx) * sz,
-                m33: (1 - (xx + yy)) * sz,
-                m34: 0,
+                      m31: (xz + wy) * sz,
+                      m32: (yz - wx) * sz,
+                      m33: (1 - (xx + yy)) * sz,
+                      m34: 0,
 
-                m41: translation.x,
-                m42: translation.y,
-                m43: translation.z,
-                m44: 1)
+                      m41: translation.x,
+                      m42: translation.y,
+                      m43: translation.z,
+                      m44: 1)
     }
 
     /// Calculate a matrix from scale vector.
     /// - Parameters:
     ///   - s: The scale vector
     /// - Returns: The calculated matrix
-    public static func scaling(s: Vector3) -> Matrix {
+    static func scaling(s: Vector3) -> Matrix {
         Matrix(m11: s.x,
-                m12: 0,
-                m13: 0,
-                m14: 0,
+               m12: 0,
+               m13: 0,
+               m14: 0,
 
-                m21: 0,
-                m22: s.y,
-                m23: 0,
-                m24: 0,
+               m21: 0,
+               m22: s.y,
+               m23: 0,
+               m24: 0,
 
-                m31: 0,
-                m32: 0,
-                m33: s.z,
-                m34: 0,
+               m31: 0,
+               m32: 0,
+               m33: s.z,
+               m34: 0,
 
-                m41: 0,
-                m42: 0,
-                m43: 0,
-                m44: 1)
+               m41: 0,
+               m42: 0,
+               m43: 0,
+               m44: 1)
     }
 
     /// Calculate a matrix from translation vector.
     /// - Parameters:
     ///   - translation: The translation vector
     /// - Returns: The calculated matrix
-    public static func translation(translation: Vector3) -> Matrix {
+    static func translation(translation: Vector3) -> Matrix {
         Matrix(m11: 1,
-                m12: 0,
-                m13: 0,
-                m14: 0,
+               m12: 0,
+               m13: 0,
+               m14: 0,
 
-                m21: 0,
-                m22: 1,
-                m23: 0,
-                m24: 0,
+               m21: 0,
+               m22: 1,
+               m23: 0,
+               m24: 0,
 
-                m31: 0,
-                m32: 0,
-                m33: 1,
-                m34: 0,
+               m31: 0,
+               m32: 0,
+               m33: 1,
+               m34: 0,
 
-                m41: translation.x,
-                m42: translation.y,
-                m43: translation.z,
-                m44: 1)
+               m41: translation.x,
+               m42: translation.y,
+               m43: translation.z,
+               m44: 1)
     }
 
     /// Calculate the inverse of the specified matrix.
     /// - Parameters:
     ///   - a: The matrix whose inverse is to be calculated
     /// - Returns: The inverse of the specified matrix
-    public static func invert(a: Matrix) -> Matrix {
+    static func invert(a: Matrix) -> Matrix {
         Matrix(a.elements.inverse)
     }
 
@@ -281,7 +280,7 @@ extension Matrix {
     ///   - target: The camera look-at target
     ///   - up: The camera's up vector
     /// - Returns: The calculated look-at matrix
-    public static func lookAt(eye: Vector3, target: Vector3, up: Vector3) -> Matrix {
+    static func lookAt(eye: Vector3, target: Vector3, up: Vector3) -> Matrix {
         var zAxis = eye - target
         zAxis = zAxis.normalized
         var xAxis = Vector3.cross(left: up, right: zAxis)
@@ -289,24 +288,24 @@ extension Matrix {
         let yAxis = Vector3.cross(left: zAxis, right: xAxis)
 
         return Matrix(m11: xAxis.x,
-                m12: yAxis.x,
-                m13: zAxis.x,
-                m14: 0,
+                      m12: yAxis.x,
+                      m13: zAxis.x,
+                      m14: 0,
 
-                m21: xAxis.y,
-                m22: yAxis.y,
-                m23: zAxis.y,
-                m24: 0,
+                      m21: xAxis.y,
+                      m22: yAxis.y,
+                      m23: zAxis.y,
+                      m24: 0,
 
-                m31: xAxis.z,
-                m32: yAxis.z,
-                m33: zAxis.z,
-                m34: 0,
+                      m31: xAxis.z,
+                      m32: yAxis.z,
+                      m33: zAxis.z,
+                      m34: 0,
 
-                m41: -Vector3.dot(left: xAxis, right: eye),
-                m42: -Vector3.dot(left: yAxis, right: eye),
-                m43: -Vector3.dot(left: zAxis, right: eye),
-                m44: 1)
+                      m41: -Vector3.dot(left: xAxis, right: eye),
+                      m42: -Vector3.dot(left: yAxis, right: eye),
+                      m43: -Vector3.dot(left: zAxis, right: eye),
+                      m44: 1)
     }
 
     /// Calculate an orthographic projection matrix.
@@ -318,32 +317,31 @@ extension Matrix {
     ///   - near: The depth of the near plane
     ///   - far: The depth of the far plane
     /// - Returns: The calculated orthographic projection matrix
-    public static func ortho(left: Float, right: Float, bottom: Float, top: Float, near: Float, far: Float) -> Matrix {
+    static func ortho(left: Float, right: Float, bottom: Float, top: Float, near: Float, far: Float) -> Matrix {
         let lr = 1 / (left - right)
         let bt = 1 / (bottom - top)
         let nf = 1 / (near - far)
 
         return Matrix(m11: -2 * lr,
-                m12: 0,
-                m13: 0,
-                m14: 0,
+                      m12: 0,
+                      m13: 0,
+                      m14: 0,
 
-                m21: 0,
-                m22: -2 * bt,
-                m23: 0,
-                m24: 0,
+                      m21: 0,
+                      m22: -2 * bt,
+                      m23: 0,
+                      m24: 0,
 
-                m31: 0,
-                m32: 0,
-                m33: nf,
-                m34: 0,
+                      m31: 0,
+                      m32: 0,
+                      m33: nf,
+                      m34: 0,
 
-                m41: (left + right) * lr,
-                m42: (top + bottom) * bt,
-                m43: near * nf,
-                m44: 1)
+                      m41: (left + right) * lr,
+                      m42: (top + bottom) * bt,
+                      m43: near * nf,
+                      m44: 1)
     }
-
 
     /// Calculate a perspective projection matrix.
     /// - Parameters:
@@ -352,29 +350,29 @@ extension Matrix {
     ///   - near: The depth of the near plane
     ///   - far: The depth of the far plane
     /// - Returns: The calculated perspective projection matrix
-    public static func perspective(fovy: Float, aspect: Float, near: Float, far: Float) -> Matrix {
+    static func perspective(fovy: Float, aspect: Float, near: Float, far: Float) -> Matrix {
         let f = 1.0 / tan(fovy / 2)
         let nf = 1 / (near - far)
 
         return Matrix(m11: f / aspect,
-                m12: 0,
-                m13: 0,
-                m14: 0,
+                      m12: 0,
+                      m13: 0,
+                      m14: 0,
 
-                m21: 0,
-                m22: f,
-                m23: 0,
-                m24: 0,
+                      m21: 0,
+                      m22: f,
+                      m23: 0,
+                      m24: 0,
 
-                m31: 0,
-                m32: 0,
-                m33: far * nf,
-                m34: -1,
+                      m31: 0,
+                      m32: 0,
+                      m33: far * nf,
+                      m34: -1,
 
-                m41: 0,
-                m42: 0,
-                m43: far * near * nf,
-                m44: 0)
+                      m41: 0,
+                      m42: 0,
+                      m43: far * near * nf,
+                      m44: 0)
     }
 
     /// The specified matrix rotates around an arbitrary axis.
@@ -383,7 +381,7 @@ extension Matrix {
     ///   - axis: The axis
     ///   - r:  The rotation angle in radians
     /// - Returns: The rotated matrix
-    public static func rotateAxisAngle(m: Matrix, axis: Vector3, r: Float) -> Matrix {
+    static func rotateAxisAngle(m: Matrix, axis: Vector3, r: Float) -> Matrix {
         Matrix(m.elements * matrix_float4x4(simd_quatf(angle: r, axis: axis.elements)))
     }
 
@@ -392,7 +390,7 @@ extension Matrix {
     ///   - m: The matrix
     ///   - s: The given vector
     /// - Returns: The scaled matrix
-    public static func scale(m: Matrix, s: Vector3) -> Matrix {
+    static func scale(m: Matrix, s: Vector3) -> Matrix {
         var elements = m.elements
         elements.columns.0 *= s.x
         elements.columns.1 *= s.y
@@ -405,7 +403,7 @@ extension Matrix {
     ///   - m: The matrix
     ///   - v: The given vector
     /// - Returns: The translated matrix
-    public static func translate(m: Matrix, v: Vector3) -> Matrix {
+    static func translate(m: Matrix, v: Vector3) -> Matrix {
         let x = v.x
         let y = v.y
         let z = v.z
@@ -425,14 +423,14 @@ extension Matrix {
     /// - Parameters:
     ///   - a: The specified matrix
     /// - Returns: The transpose of the specified matrix
-    public static func transpose(a: Matrix) -> Matrix {
+    static func transpose(a: Matrix) -> Matrix {
         Matrix(a.elements.transpose)
     }
 }
 
-//MARK: - Class Method
+// MARK: - Class Method
 
-extension Matrix {
+public extension Matrix {
     /// Set the value of this matrix, and return this matrix.
     /// - Parameters:
     ///   - m11: column 1, row 1
@@ -452,10 +450,11 @@ extension Matrix {
     ///   - m43: column 4, row 3
     ///   - m44: column 4, row 4
     /// - Returns: This matrix
-    mutating func set(m11: Float, m12: Float, m13: Float, m14: Float,
-                             m21: Float, m22: Float, m23: Float, m24: Float,
-                             m31: Float, m32: Float, m33: Float, m34: Float,
-                             m41: Float, m42: Float, m43: Float, m44: Float) -> Matrix {
+    internal mutating func set(m11: Float, m12: Float, m13: Float, m14: Float,
+                               m21: Float, m22: Float, m23: Float, m24: Float,
+                               m31: Float, m32: Float, m33: Float, m34: Float,
+                               m41: Float, m42: Float, m43: Float, m44: Float) -> Matrix
+    {
         elements.columns.0 = SIMD4<Float>(m11, m12, m13, m14)
         elements.columns.1 = SIMD4<Float>(m21, m22, m23, m24)
         elements.columns.2 = SIMD4<Float>(m31, m32, m33, m34)
@@ -464,16 +463,15 @@ extension Matrix {
         return self
     }
 
-
     /// Set the value of this matrix by an array.
     /// - Parameters:
     ///   - array: The array
     ///   - offset: The start offset of the array
     /// - Returns: This matrix
-    mutating func set(array: Array<Float>, offset: Int = 0) -> Matrix {
+    internal mutating func set(array: [Float], offset: Int = 0) -> Matrix {
         var index = 0
-        for i in 0..<4 {
-            for j in 0..<4 {
+        for i in 0 ..< 4 {
+            for j in 0 ..< 4 {
                 elements[i, j] = array[index + offset]
                 index += 1
             }
@@ -484,14 +482,14 @@ extension Matrix {
     /// Determines the product of this matrix and the specified matrix.
     /// - Parameter right: The specified matrix
     /// - Returns: This matrix that store the product of the two matrices
-    public mutating func multiply(right: Matrix) -> Matrix {
+    mutating func multiply(right: Matrix) -> Matrix {
         self = self * right
         return self
     }
 
     /// Identity this matrix.
     /// - Returns: This matrix after identity
-    public mutating func identity() -> Matrix {
+    mutating func identity() -> Matrix {
         elements = simd_float4x4(0)
         elements.columns.0[0] = 1
         elements.columns.1[1] = 1
@@ -503,7 +501,7 @@ extension Matrix {
 
     /// Invert the matrix.
     /// - Returns: The matrix after invert
-    public mutating func invert() -> Matrix {
+    mutating func invert() -> Matrix {
         self = Matrix.invert(a: self)
         return self
     }
@@ -513,7 +511,7 @@ extension Matrix {
     ///   - axis: The axis
     ///   - r: The rotation angle in radians
     /// - Returns: This matrix after rotate
-    public mutating func rotateAxisAngle(axis: Vector3, r: Float) -> Matrix {
+    mutating func rotateAxisAngle(axis: Vector3, r: Float) -> Matrix {
         self = Matrix.rotateAxisAngle(m: self, axis: axis, r: r)
         return self
     }
@@ -521,7 +519,7 @@ extension Matrix {
     /// Scale this matrix by a given vector.
     /// - Parameter s: The given vector
     /// - Returns: This matrix after scale
-    public mutating func scale(s: Vector3) -> Matrix {
+    mutating func scale(s: Vector3) -> Matrix {
         self = Matrix.scale(m: self, s: s)
         return self
     }
@@ -529,25 +527,25 @@ extension Matrix {
     /// Translate this matrix by a given vector.
     /// - Parameter v: The given vector
     /// - Returns: This matrix after translate
-    public mutating func translate(v: Vector3) -> Matrix {
+    mutating func translate(v: Vector3) -> Matrix {
         self = Matrix.translate(m: self, v: v)
         return self
     }
 
     /// Calculate the transpose of this matrix.
     /// - Returns: This matrix after transpose
-    public mutating func transpose() -> Matrix {
+    mutating func transpose() -> Matrix {
         self = Matrix.transpose(a: self)
         return self
     }
 }
 
-extension Matrix {
+public extension Matrix {
     /// Clone the value of this matrix to an array.
     /// - Parameters:
     ///   - out: The array
     ///   - outOffset: The start offset of the array
-    public func toArray(out: inout [Float], outOffset: Int = 0) {
+    func toArray(out: inout [Float], outOffset: Int = 0) {
         out[outOffset] = elements.columns.0[0]
         out[outOffset + 1] = elements.columns.0[1]
         out[outOffset + 2] = elements.columns.0[2]
@@ -568,10 +566,9 @@ extension Matrix {
 
     /// Calculate a determinant of this matrix.
     /// - Returns: The determinant of this matrix
-    public func determinant() -> Float {
+    func determinant() -> Float {
         elements.determinant
     }
-
 
     /// Decompose this matrix to translation, rotation and scale elements.
     /// - Parameters:
@@ -579,7 +576,7 @@ extension Matrix {
     ///   - rotation: Rotation quaternion as an output parameter
     ///   - scale: Scale vector as an output parameter
     /// - Returns: True if this matrix can be decomposed, false otherwise
-    public func decompose(translation: inout Vector3, rotation: inout Quaternion, scale: inout Vector3) -> Bool {
+    func decompose(translation: inout Vector3, rotation: inout Quaternion, scale: inout Vector3) -> Bool {
         let m11 = elements.columns.0[0]
         let m12 = elements.columns.0[1]
         let m13 = elements.columns.0[2]
@@ -605,9 +602,10 @@ extension Matrix {
 
         scale = Vector3(sx, sy, sz)
 
-        if (abs(sx) < Float.leastNonzeroMagnitude ||
-                abs(sy) < Float.leastNonzeroMagnitude ||
-                abs(sz) < Float.leastNonzeroMagnitude) {
+        if abs(sx) < Float.leastNonzeroMagnitude ||
+            abs(sy) < Float.leastNonzeroMagnitude ||
+            abs(sz) < Float.leastNonzeroMagnitude
+        {
             rotation = Quaternion()
             return false
         } else {
@@ -616,28 +614,27 @@ extension Matrix {
             let invSZ = 1 / sz
 
             rotation = Quaternion(Matrix3x3(m11: m11 * invSX,
-                    m12: m12 * invSX,
-                    m13: m13 * invSX,
-                    m21: m21 * invSY,
-                    m22: m22 * invSY,
-                    m23: m23 * invSY,
-                    m31: m31 * invSZ,
-                    m32: m32 * invSZ,
-                    m33: m33 * invSZ))
+                                            m12: m12 * invSX,
+                                            m13: m13 * invSX,
+                                            m21: m21 * invSY,
+                                            m22: m22 * invSY,
+                                            m23: m23 * invSY,
+                                            m31: m31 * invSZ,
+                                            m32: m32 * invSZ,
+                                            m33: m33 * invSZ))
             return true
         }
     }
 
-
     /// Get rotation from this matrix.
     /// - Returns: The out
-    public func getRotation() -> Quaternion {
+    func getRotation() -> Quaternion {
         Quaternion(simd_quatf(elements))
     }
 
     /// Get scale from this matrix.
     /// - Returns: The out
-    public func getScaling() -> Vector3 {
+    func getScaling() -> Vector3 {
         let m11 = elements.columns.0[0]
         let m12 = elements.columns.0[1]
         let m13 = elements.columns.0[2]
@@ -649,20 +646,19 @@ extension Matrix {
         let m33 = elements.columns.2[2]
 
         return Vector3(sqrt(m11 * m11 + m12 * m12 + m13 * m13),
-                sqrt(m21 * m21 + m22 * m22 + m23 * m23),
-                sqrt(m31 * m31 + m32 * m32 + m33 * m33))
+                       sqrt(m21 * m21 + m22 * m22 + m23 * m23),
+                       sqrt(m31 * m31 + m32 * m32 + m33 * m33))
     }
-
 
     /// Get translation from this matrix.
     /// - Returns: The out
-    public func getTranslation() -> Vector3 {
+    func getTranslation() -> Vector3 {
         Vector3(elements.columns.3[0],
                 elements.columns.3[1],
                 elements.columns.3[2])
     }
-    
-    public mutating func setTranslation(_ v: Vector3) {
+
+    mutating func setTranslation(_ v: Vector3) {
         elements.columns.3[0] = v.x
         elements.columns.3[1] = v.y
         elements.columns.3[2] = v.z
@@ -676,7 +672,7 @@ extension Matrix: Codable {
         case columns2
         case columns3
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let columns0 = try container.decode(SIMD4<Float>.self, forKey: .columns0)
@@ -685,7 +681,7 @@ extension Matrix: Codable {
         let columns3 = try container.decode(SIMD4<Float>.self, forKey: .columns3)
         elements = simd_float4x4(columns0, columns1, columns2, columns3)
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(elements.columns.0, forKey: .columns0)

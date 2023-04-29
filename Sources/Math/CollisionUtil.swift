@@ -7,7 +7,7 @@
 import Foundation
 
 /// Contains static methods to help in determining intersections, containment, etc.
-public class CollisionUtil {
+public enum CollisionUtil {
     /// Calculate the intersection point of three plane.
     /// - Parameters:
     ///   - p1: Plane 1
@@ -34,7 +34,6 @@ public class CollisionUtil {
         return tempVec30 + tempVec31 + tempVec32
     }
 
-
     /// Calculate the distance from a point to a plane.
     /// - Parameters:
     ///   - plane: The plane
@@ -51,15 +50,14 @@ public class CollisionUtil {
     /// - Returns: The intersection type
     public static func intersectsPlaneAndPoint(plane: Plane, point: Vector3) -> PlaneIntersectionType {
         let distance = CollisionUtil.distancePlaneAndPoint(plane: plane, point: point)
-        if (distance > 0) {
+        if distance > 0 {
             return PlaneIntersectionType.Front
         }
-        if (distance < 0) {
+        if distance < 0 {
             return PlaneIntersectionType.Back
         }
         return PlaneIntersectionType.Intersecting
     }
-
 
     /// Get the intersection type between a plane and a box (AABB).
     /// - Parameters:
@@ -73,21 +71,21 @@ public class CollisionUtil {
         var front = SIMD3<Float>()
         var back = SIMD3<Float>()
 
-        if (normal.x >= 0) {
+        if normal.x >= 0 {
             front.x = max.x
             back.x = min.x
         } else {
             front.x = min.x
             back.x = max.x
         }
-        if (normal.y >= 0) {
+        if normal.y >= 0 {
             front.y = max.y
             back.y = min.y
         } else {
             front.y = min.y
             back.y = max.y
         }
-        if (normal.z >= 0) {
+        if normal.z >= 0 {
             front.z = max.z
             back.z = min.z
         } else {
@@ -95,11 +93,11 @@ public class CollisionUtil {
             back.z = max.z
         }
 
-        if (CollisionUtil.distancePlaneAndPoint(plane: plane, point: Vector3(front)) < 0) {
+        if CollisionUtil.distancePlaneAndPoint(plane: plane, point: Vector3(front)) < 0 {
             return PlaneIntersectionType.Back
         }
 
-        if (CollisionUtil.distancePlaneAndPoint(plane: plane, point: Vector3(back)) > 0) {
+        if CollisionUtil.distancePlaneAndPoint(plane: plane, point: Vector3(back)) > 0 {
             return PlaneIntersectionType.Front
         }
 
@@ -115,10 +113,10 @@ public class CollisionUtil {
         let center = sphere.center
         let radius = sphere.radius
         let distance = CollisionUtil.distancePlaneAndPoint(plane: plane, point: center)
-        if (distance > radius) {
+        if distance > radius {
             return PlaneIntersectionType.Front
         }
-        if (distance < -radius) {
+        if distance < -radius {
             return PlaneIntersectionType.Back
         }
         return PlaneIntersectionType.Intersecting
@@ -135,15 +133,15 @@ public class CollisionUtil {
 
         let dir = Vector3.dot(left: normal, right: ray.direction)
         // Parallel
-        if (abs(dir) < zeroTolerance) {
+        if abs(dir) < zeroTolerance {
             return -1
         }
 
         let position = Vector3.dot(left: normal, right: ray.origin)
         var distance = (-plane.distance - position) / dir
 
-        if (distance < 0) {
-            if (distance < -zeroTolerance) {
+        if distance < 0 {
+            if distance < -zeroTolerance {
                 return -1
             }
 
@@ -173,8 +171,8 @@ public class CollisionUtil {
         var distance: Float = 0.0
         var tmax = Float.greatestFiniteMagnitude
 
-        if (abs(dirX) < zeroTolerance) {
-            if (oriX < min.x || oriX > max.x) {
+        if abs(dirX) < zeroTolerance {
+            if oriX < min.x || oriX > max.x {
                 return -1
             }
         } else {
@@ -182,7 +180,7 @@ public class CollisionUtil {
             var t1 = (min.x - oriX) * inverse
             var t2 = (max.x - oriX) * inverse
 
-            if (t1 > t2) {
+            if t1 > t2 {
                 let temp = t1
                 t1 = t2
                 t2 = temp
@@ -191,13 +189,13 @@ public class CollisionUtil {
             distance = Swift.max(t1, distance)
             tmax = Swift.min(t2, tmax)
 
-            if (distance > tmax) {
+            if distance > tmax {
                 return -1
             }
         }
 
-        if (abs(dirY) < zeroTolerance) {
-            if (oriY < min.y || oriY > max.y) {
+        if abs(dirY) < zeroTolerance {
+            if oriY < min.y || oriY > max.y {
                 return -1
             }
         } else {
@@ -205,7 +203,7 @@ public class CollisionUtil {
             var t1 = (min.y - oriY) * inverse
             var t2 = (max.y - oriY) * inverse
 
-            if (t1 > t2) {
+            if t1 > t2 {
                 let temp = t1
                 t1 = t2
                 t2 = temp
@@ -214,13 +212,13 @@ public class CollisionUtil {
             distance = Swift.max(t1, distance)
             tmax = Swift.min(t2, tmax)
 
-            if (distance > tmax) {
+            if distance > tmax {
                 return -1
             }
         }
 
-        if (abs(dirZ) < zeroTolerance) {
-            if (oriZ < min.z || oriZ > max.z) {
+        if abs(dirZ) < zeroTolerance {
+            if oriZ < min.z || oriZ > max.z {
                 return -1
             }
         } else {
@@ -228,7 +226,7 @@ public class CollisionUtil {
             var t1 = (min.z - oriZ) * inverse
             var t2 = (max.z - oriZ) * inverse
 
-            if (t1 > t2) {
+            if t1 > t2 {
                 let temp = t1
                 t1 = t2
                 t2 = temp
@@ -237,7 +235,7 @@ public class CollisionUtil {
             distance = Swift.max(t1, distance)
             tmax = Swift.min(t2, tmax)
 
-            if (distance > tmax) {
+            if distance > tmax {
                 return -1
             }
         }
@@ -260,17 +258,17 @@ public class CollisionUtil {
         let b = Vector3.dot(left: m, right: direction)
         let c = Vector3.dot(left: m, right: m) - radius * radius
 
-        if (b > 0 && c > 0) {
+        if b > 0 && c > 0 {
             return -1
         }
 
         let discriminant = b * b - c
-        if (discriminant < 0) {
+        if discriminant < 0 {
             return -1
         }
 
         var distance = -b - sqrt(discriminant)
-        if (distance < 0) {
+        if distance < 0 {
             distance = 0
         }
 
@@ -283,11 +281,11 @@ public class CollisionUtil {
     ///   - boxB: The second box to check
     /// - Returns: True if the boxes intersect, false otherwise
     public static func intersectsBoxAndBox(boxA: BoundingBox, boxB: BoundingBox) -> Bool {
-        if (boxA.min.x > boxB.max.x || boxB.min.x > boxA.max.x) {
+        if boxA.min.x > boxB.max.x || boxB.min.x > boxA.max.x {
             return false
         }
 
-        if (boxA.min.y > boxB.max.y || boxB.min.y > boxA.max.y) {
+        if boxA.min.y > boxB.max.y || boxB.min.y > boxA.max.y {
             return false
         }
 
@@ -313,9 +311,9 @@ public class CollisionUtil {
         let center = sphere.center
 
         let closestPoint = Vector3(
-                max(box.min.x, min(center.x, box.max.x)),
-                max(box.min.y, min(center.y, box.max.y)),
-                max(box.min.z, min(center.z, box.max.z))
+            max(box.min.x, min(center.x, box.max.x)),
+            max(box.min.y, min(center.y, box.max.y)),
+            max(box.min.z, min(center.z, box.max.z))
         )
 
         let distance = Vector3.distanceSquared(left: center, right: closestPoint)
@@ -331,13 +329,13 @@ public class CollisionUtil {
         let min = box.min
         let max = box.max
 
-        for i in 0..<6 {
+        for i in 0 ..< 6 {
             let plane = frustum.getPlane(face: FrustumFace(rawValue: i) ?? FrustumFace.Top)
             let normal = plane.normal
             let back = Vector3(normal.x >= 0 ? max.x : min.x,
-                    normal.y >= 0 ? max.y : min.y,
-                    normal.z >= 0 ? max.z : min.z)
-            if (Vector3.dot(left: plane.normal, right: back) < -plane.distance) {
+                               normal.y >= 0 ? max.y : min.y,
+                               normal.z >= 0 ? max.z : min.z)
+            if Vector3.dot(left: plane.normal, right: back) < -plane.distance {
                 return false
             }
         }
@@ -357,25 +355,25 @@ public class CollisionUtil {
         var back = SIMD3<Float>()
         var result = ContainmentType.Contains
 
-        for i in 0..<6 {
+        for i in 0 ..< 6 {
             let plane = frustum.getPlane(face: FrustumFace(rawValue: i) ?? FrustumFace.Top)
             let normal = plane.normal
 
-            if (normal.x >= 0) {
+            if normal.x >= 0 {
                 front.x = max.x
                 back.x = min.x
             } else {
                 front.x = min.x
                 back.x = max.x
             }
-            if (normal.y >= 0) {
+            if normal.y >= 0 {
                 front.y = max.y
                 back.y = min.y
             } else {
                 front.y = min.y
                 back.y = max.y
             }
-            if (normal.z >= 0) {
+            if normal.z >= 0 {
                 front.z = max.z
                 back.z = min.z
             } else {
@@ -383,11 +381,11 @@ public class CollisionUtil {
                 back.z = max.z
             }
 
-            if (CollisionUtil.intersectsPlaneAndPoint(plane: plane, point: Vector3(front)) == PlaneIntersectionType.Back) {
+            if CollisionUtil.intersectsPlaneAndPoint(plane: plane, point: Vector3(front)) == PlaneIntersectionType.Back {
                 return ContainmentType.Disjoint
             }
 
-            if (CollisionUtil.intersectsPlaneAndPoint(plane: plane, point: Vector3(back)) == PlaneIntersectionType.Back) {
+            if CollisionUtil.intersectsPlaneAndPoint(plane: plane, point: Vector3(back)) == PlaneIntersectionType.Back {
                 result = ContainmentType.Intersects
             }
         }
@@ -403,12 +401,12 @@ public class CollisionUtil {
     public static func frustumContainsSphere(frustum: BoundingFrustum, sphere: BoundingSphere) -> ContainmentType {
         var result = ContainmentType.Contains
 
-        for i in 0..<6 {
+        for i in 0 ..< 6 {
             let plane = frustum.getPlane(face: FrustumFace(rawValue: i) ?? FrustumFace.Top)
             let intersectionType = CollisionUtil.intersectsPlaneAndSphere(plane: plane, sphere: sphere)
-            if (intersectionType == PlaneIntersectionType.Back) {
+            if intersectionType == PlaneIntersectionType.Back {
                 return ContainmentType.Disjoint
-            } else if (intersectionType == PlaneIntersectionType.Intersecting) {
+            } else if intersectionType == PlaneIntersectionType.Intersecting {
                 result = ContainmentType.Intersects
                 break
             }

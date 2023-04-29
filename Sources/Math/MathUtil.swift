@@ -4,18 +4,18 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import simd
 import Darwin
+import simd
 
 /// Common utility methods for math operations.
-public class MathUtil {
+public enum MathUtil {
     /// The value for which all absolute numbers smaller than are considered equal to zero.
     public static let zeroTolerance: Float = 1e-5
     /// The conversion factor that radian to degree.
     public static let radToDegreeFactor: Float = 57.29578
     /// The conversion factor that degree to radian.
     public static let degreeToRadFactor: Float = 0.017453292
-    
+
     /// Checks if a and b are almost equals.
     /// The absolute value of the difference between a and b is close to zero.
     /// - Parameters:
@@ -173,7 +173,7 @@ public class MathUtil {
 
     /// Returns the sign of f.
     public static func sign(_ f: Float) -> Float {
-        Double(f) >= 0.0 ? 1: -1
+        Double(f) >= 0.0 ? 1 : -1
     }
 
     /// Clamps the given value between the given minimum float and maximum float values.
@@ -202,9 +202,9 @@ public class MathUtil {
     /// - Returns: The int result between min and max values.
     public static func clamp(value: Int, min: Int, max: Int) -> Int {
         var value = value
-        if (value < min) {
+        if value < min {
             value = min
-        } else if (value > max) {
+        } else if value > max {
             value = max
         }
         return value
@@ -273,17 +273,17 @@ public class MathUtil {
         return Float(Double(to) * Double(t) + Double(from) * (1.0 - Double(t)))
     }
 
-
     public static func smoothDamp(current: Float,
                                   target: Float,
                                   currentVelocity: inout Float,
                                   smoothTime: Float,
                                   deltaTime: Float,
-                                  maxSpeed: Float = Float.infinity) -> Float {
+                                  maxSpeed: Float = Float.infinity) -> Float
+    {
         let smoothTime = MathUtil.max(0.0001, smoothTime)
         let num1: Float = 2.0 / smoothTime
         let num2: Float = num1 * deltaTime
-        let num3: Float = Float(1.0 / (1.0 + Double(num2) + 0.47999998927116394 * Double(num2) * Double(num2)
+        let num3 = Float(1.0 / (1.0 + Double(num2) + 0.47999998927116394 * Double(num2) * Double(num2)
                 + 0.23499999940395355 * Double(num2) * Double(num2) * Double(num2)))
         let num4: Float = current - target
         let num5: Float = target
@@ -300,16 +300,16 @@ public class MathUtil {
         return num8
     }
 
-
     public static func smoothDampAngle(current: Float,
                                        target: Float,
                                        currentVelocity: inout Float,
                                        smoothTime: Float,
                                        deltaTime: Float,
-                                       maxSpeed: Float = Float.infinity) -> Float {
+                                       maxSpeed: Float = Float.infinity) -> Float
+    {
         let target = current + MathUtil.deltaAngle(current: current, target: target)
         return MathUtil.smoothDamp(current: current, target: target, currentVelocity: &currentVelocity,
-                smoothTime: smoothTime, deltaTime: deltaTime, maxSpeed: maxSpeed)
+                                   smoothTime: smoothTime, deltaTime: deltaTime, maxSpeed: maxSpeed)
     }
 
     /// Loops the value t, so that it is never larger than length and never smaller than 0.
@@ -317,29 +317,28 @@ public class MathUtil {
         MathUtil.clamp(value: t - MathUtil.floor(t / length) * length, min: 0.0, max: length)
     }
 
-/// PingPong returns a value that will increment and decrement between the value 0 and length.
+    /// PingPong returns a value that will increment and decrement between the value 0 and length.
     public static func pingPong(t: Float, length: Float) -> Float {
         let t = MathUtil.repeating(t: t, length: length * 2)
         return length - MathUtil.abs(t - length)
     }
 
-/// Determines where a value lies between two points.
-/// - Parameters:
-///   - a: The start of the range.
-///   - b: The end of the range.
-///   - value: The point within the range you want to calculate.
-/// - Returns: A value between zero and one, representing where the "value" parameter falls within the range defined by a and b.
+    /// Determines where a value lies between two points.
+    /// - Parameters:
+    ///   - a: The start of the range.
+    ///   - b: The end of the range.
+    ///   - value: The point within the range you want to calculate.
+    /// - Returns: A value between zero and one, representing where the "value" parameter falls within the range defined by a and b.
     public static func inverseLerp(a: Float, b: Float, value: Float) -> Float {
         Double(a) != Double(b) ? MathUtil.clamp01(value: Float((Double(value) - Double(a)) / (Double(b) - Double(a)))) : 0.0
     }
 
-/// Calculates the shortest difference between two given angles given in degrees.
+    /// Calculates the shortest difference between two given angles given in degrees.
     public static func deltaAngle(current: Float, target: Float) -> Float {
         var num = MathUtil.repeating(t: target - current, length: 360)
-        if (Double(num) > 180.0) {
+        if Double(num) > 180.0 {
             num -= 360
         }
         return num
     }
-
 }
